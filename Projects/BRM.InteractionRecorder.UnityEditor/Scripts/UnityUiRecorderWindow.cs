@@ -5,7 +5,7 @@ namespace BRM.InteractionRecorder.UnityEditor
 {
     public class UnityUiRecorderWindow : RecorderWindow<UnityEventServiceFactory>
     {
-        [MenuItem("/" + Constants.PackageName + "/" + Constants.DisplayedAppName + ": Unity Ui")]
+        [MenuItem("/" + Constants.PackageDeveloper + "/" + Constants.DisplayedAppName + ": Unity Ui")]
         private static void ShowWindow()
         {
             var window = GetWindow<UnityUiRecorderWindow>($"{Constants.DisplayedAppName}");

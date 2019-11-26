@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionRecorder.UnityUi", "Projects\BRM.InteractionRecorder.UnityUi\BRM.InteractionRecorder.UnityUi.csproj", "{03166CF7-9867-45AC-B29D-AE2D619394BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionRecorder.UnityEditor", "Projects\BRM.InteractionRecorder.UnityEditor\BRM.InteractionRecorder.UnityEditor.csproj", "{126843B2-8EFA-4BA9-8B7C-B23F9EA0138B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionRecorder.TmpUi", "Projects\BRM.InteractionRecorder.TmpUi\BRM.InteractionRecorder.TmpUi.csproj", "{563BFB06-66FA-4048-A8AB-6C5F6C703BB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionRecorder.TmpEditor", "Projects\BRM.InteractionRecorder.TmpEditor\BRM.InteractionRecorder.TmpEditor.csproj", "{8628782E-72EC-4346-B5CD-BA2220F91B96}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03166CF7-9867-45AC-B29D-AE2D619394BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03166CF7-9867-45AC-B29D-AE2D619394BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03166CF7-9867-45AC-B29D-AE2D619394BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03166CF7-9867-45AC-B29D-AE2D619394BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{126843B2-8EFA-4BA9-8B7C-B23F9EA0138B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{126843B2-8EFA-4BA9-8B7C-B23F9EA0138B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{126843B2-8EFA-4BA9-8B7C-B23F9EA0138B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{126843B2-8EFA-4BA9-8B7C-B23F9EA0138B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{563BFB06-66FA-4048-A8AB-6C5F6C703BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{563BFB06-66FA-4048-A8AB-6C5F6C703BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{563BFB06-66FA-4048-A8AB-6C5F6C703BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{563BFB06-66FA-4048-A8AB-6C5F6C703BB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8628782E-72EC-4346-B5CD-BA2220F91B96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8628782E-72EC-4346-B5CD-BA2220F91B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8628782E-72EC-4346-B5CD-BA2220F91B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8628782E-72EC-4346-B5CD-BA2220F91B96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

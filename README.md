@@ -1,10 +1,10 @@
 # Interaction Recorder
 
-##DEV NOTES
+## DEV NOTES
 To link required dll dependencies, find the following within your local UnityEditor + UnityProject Folders like so:
 
-*Unity.TextMeshPro, UnityEngine.UI.dll <= UnityProjectFolder/Library/ScriptAssemblies
-*UnityEngine.dll, UnityEngine.CoreModule.dll, UnityEngine.InputLegacyModule.dll <= Unity2019.2.9f1\Editor\Data\Managed\UnityEngine
+* Unity.TextMeshPro, UnityEngine.UI.dll <= UnityProjectFolder/Library/ScriptAssemblies
+* UnityEngine.dll, UnityEngine.CoreModule.dll, UnityEngine.InputLegacyModule.dll <= Unity2019.2.9f1\Editor\Data\Managed\UnityEngine
 
 ## USE NOTES
 
@@ -25,4 +25,4 @@ Recorded interactions include
 * To record ui interactions in a live build, you must interface with the EventService class
 
 ## EXAMPLES
-*Examples to come
+* Examples to come

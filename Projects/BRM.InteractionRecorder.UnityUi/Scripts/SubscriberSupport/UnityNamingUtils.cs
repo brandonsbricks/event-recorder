@@ -7,18 +7,38 @@ namespace BRM.InteractionRecorder.UnityUi
     public static class UnityNamingUtils
     {
         private const string _indexCharacterSeparator = ";i=";
-        
-        
+
         public static string GetHierarchyName(Transform tran)
         {
-            List<string> names = new List<string> {tran.name};
+            var names = GetUniqueNamesToRoot(tran);
+            return BuildName(names);
+        }
+
+        /// <summary>
+        /// names ordered from the given transform up until the root transform
+        /// Non-unique transforms in the hierarchy are modified to indicate their sibling index
+        /// </summary>
+        private static List<string> GetUniqueNamesToRoot(Transform tran)
+        {
+            List<string> names = new List<string>();
             Transform currentTransform = tran;
-            while (currentTransform.parent != null)
+            while (currentTransform != null)
             {
-                var parent = currentTransform.parent;
-                names.Add(parent.name);
-                currentTransform = parent;
+                var uniqueName = currentTransform.name;
+                if (!IsUniqueName(currentTransform))
+                {
+                    int sibIndex = currentTransform.GetSiblingIndex();
+                    uniqueName = $"{uniqueName}{_indexCharacterSeparator}{sibIndex}";
+                }
+                names.Add(uniqueName);
+                currentTransform = currentTransform.parent;
             }
+
+            return names;
+        }
+
+        private static string BuildName(List<string> names)
+        {
             StringBuilder finalName = new StringBuilder();
             for (int i = names.Count - 1; i >= 0; i--)
             {
@@ -29,15 +49,9 @@ namespace BRM.InteractionRecorder.UnityUi
                 }
             }
 
-            if (!IsUniqueName(tran))
-            {
-                int sibIndex = tran.GetSiblingIndex();
-                finalName.Append($"{_indexCharacterSeparator}{sibIndex}");
-            }
-
             return finalName.ToString();
         }
-        
+
         public static string GetComponentTypeNames(List<Component> components)
         {
             if (components == null)
@@ -60,7 +74,7 @@ namespace BRM.InteractionRecorder.UnityUi
         }
         
         
-        private static bool IsUniqueName(Transform tran)
+        private static bool IsUniqueName(Transform tran)//bug: when two root element gameobjects share a name, this will not distinguish them
         {
             var parent = tran.parent;
             if (ReferenceEquals(parent, null))

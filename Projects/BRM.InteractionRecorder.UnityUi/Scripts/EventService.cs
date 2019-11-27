@@ -5,12 +5,12 @@ using BRM.InteractionRecorder.UnityUi.Subscribers;
 
 namespace BRM.InteractionRecorder.UnityUi
 {    
-    public class EventService : IAddCollectors, IAddSubscribers
+    public class EventService : ISubscriberCollection
     {
         public readonly EventAndAppPayload Payload = new EventAndAppPayload();
         public int EventCount => Payload.EventCount;
         
-        private readonly SubscriberCollection _allSubscribers = null;
+        protected readonly SubscriberCollection _allSubscribers = null;
         
         public EventService(List<UiEventSubscriber> subscribers, List<UiEventCollector> collectors)
         {
@@ -25,13 +25,9 @@ namespace BRM.InteractionRecorder.UnityUi
         {
             _allSubscribers.AddUniqueCollector(collector);
         }
-        public T GetSubscriber<T>() where T : UiEventSubscriber
+        public List<IUpdate> GetUpdaters()
         {
-            return _allSubscribers.GetSubscriber<T>();
-        }
-        public T GetCollector<T>() where T : UiEventCollector
-        {
-            return _allSubscribers.GetCollector<T>();
+            return _allSubscribers.GetUpdaters();
         }
 
         public void ResetSubscriptions()

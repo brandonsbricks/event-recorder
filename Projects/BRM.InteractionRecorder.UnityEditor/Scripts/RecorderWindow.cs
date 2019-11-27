@@ -1,31 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using BRM.DataSerializers.Interfaces;
 using UnityEditor;
 using UnityEngine;
-
 using BRM.DebugAdapter;
 using BRM.FileSerializers;
 using BRM.FileSerializers.Interfaces;
 using BRM.InteractionRecorder.UnityUi;
-using BRM.InteractionRecorder.UnityUi.Subscribers;
 using BRM.InteractionRecorder.UnityUi.Models;
 using BRM.TextSerializers;
 
 namespace BRM.InteractionRecorder.UnityEditor
 {
-    public abstract class RecorderWindow<TFactory> : EditorWindow where TFactory : class, IEventFactory, new()
+    public abstract class RecorderWindow : EditorWindow
     {
         #region Variables
+
         protected EventService _eventServiceLocal;
         private Vector2 _verticalScrollPosition;
-        private GUIStyle _toggleButtonStyleNormal;
-        private GUIStyle _toggleButtonStyleToggled;
-        private GUIStyle _wrapStyle = new GUIStyle(GUI.skin.label) {wordWrap = true};
-        private GUIStyle _headerLabel = new GUIStyle(GUI.skin.label) {fontSize = 14, fontStyle = FontStyle.Bold, alignment = TextAnchor.MiddleLeft};
+        private static GUIStyle _toggleButtonStyleNormal;
+        private static GUIStyle _toggleButtonStyleToggled;
 
-        private readonly IWriteFiles _fileWriter = new TextFileSerializer(new UnityJsonSerializer(), new UnityDebugger());
+        private ISerializeText _serializer;
+        private IWriteFiles _fileWriter;
 
-        private EventService _eventService => _eventServiceLocal ?? (_eventServiceLocal = new TFactory().Create());
+        protected abstract EventService _eventService { get; }
 
         protected virtual string JsonFilePath
         {
@@ -50,14 +49,22 @@ namespace BRM.InteractionRecorder.UnityEditor
         private bool _useSearch = false;
         private bool _showSubscribedEvents = true;
         private bool _showNonSubscribedEvents = true;
-        
+
         private string _searchTerm;
         private bool _wasPlaying;
-        
+
         private event Action _onUpdate;
+
         #endregion
 
+        private void OnEnable()
+        {
+            _serializer = new UnityJsonSerializer();
+            _fileWriter = new TextFileSerializer(_serializer, new UnityDebugger());
+        }
+
         #region Gui Methods
+
         private void OnGUI()
         {
             EditorGUILayout.Space();
@@ -70,9 +77,11 @@ namespace BRM.InteractionRecorder.UnityEditor
                 return;
             }
 
-            
-            DisplayWindowHeader(_wrapStyle);
-                            
+            #region initialize variables only editable in ongui
+
+            var wrapStyle = new GUIStyle(GUI.skin.label) {wordWrap = true, alignment = TextAnchor.MiddleLeft};
+            var headerLabel = new GUIStyle(wrapStyle) {fontSize = 14, fontStyle = FontStyle.Bold, stretchWidth = true};
+            var prefixStyle = new GUIStyle(headerLabel) {fixedWidth = 30};
             if (_toggleButtonStyleNormal == null)
             {
                 _toggleButtonStyleNormal = "Button";
@@ -80,31 +89,28 @@ namespace BRM.InteractionRecorder.UnityEditor
                 _toggleButtonStyleToggled.normal.background = _toggleButtonStyleToggled.active.background;
             }
 
-            var eventCollection = _eventService.Payload.GetEventModels();
+            #endregion
 
+            DisplayWindowHeader(wrapStyle);
             DisplaySearch();
             DisplaySubscribers();
-            DisplayToggles(eventCollection);
-                            
-            if (GUILayout.Button("Refresh"))
-            {
-                _eventService.ResetSubscriptions();
-                _eventService.UpdatePayload();
-                _fileWriter.Write(_jsonFilePath, _eventService.Payload);
-                AssetDatabase.Refresh();
-            }
 
-            DisplayEventsHeader(_headerLabel);
-            DisplayEvents(_wrapStyle, eventCollection);
+            var eventCollection = _eventService.Payload.GetEventModels();
+            DisplayToggles(eventCollection);
+
+            DisplayRefreshButton();
+            DisplayEventsHeader(prefixStyle, headerLabel);
+            DisplayEvents(prefixStyle, wrapStyle, eventCollection);
         }
 
         private void DisplayWindowHeader(GUIStyle wrapStyle)
         {
             EditorGUILayout.LabelField($"Collecting interaction data to json file at:\n{JsonFilePath}", wrapStyle);
+            EditorGUILayout.Space();
             EditorGUILayout.LabelField("Tap, toggle, input text, and interact with UI elements to track these interactions.");
             EditorGUILayout.Space();
-            EditorGUILayout.Space();
             EditorGUILayout.LabelField($"Unique interactions collected: {_eventService.EventCount}");
+            EditorGUILayout.Space();
         }
 
         private void DisplaySubscribers()
@@ -117,12 +123,13 @@ namespace BRM.InteractionRecorder.UnityEditor
 
         private void DisplaySearch()
         {
-            GUILayout.BeginHorizontal();                
+            GUILayout.BeginHorizontal();
             if (GUILayout.Button("Use Search", _useSearch ? _toggleButtonStyleToggled : _toggleButtonStyleNormal))
             {
                 _useSearch = !_useSearch;
             }
-            _searchTerm = _useSearch ? EditorGUILayout.TextField("Search JSON: ",_searchTerm) : "";
+
+            _searchTerm = _useSearch ? EditorGUILayout.TextField("Search JSON: ", _searchTerm) : "";
             GUILayout.EndHorizontal();
         }
 
@@ -141,57 +148,70 @@ namespace BRM.InteractionRecorder.UnityEditor
             string newLabel = $"{label} ({numItems})";
             DisplayToggleButton(newLabel, ref showItems);
         }
+
         private void DisplayToggleButton(string label, ref bool showItems)
-        {            
+        {
             if (GUILayout.Button(label, showItems ? _toggleButtonStyleToggled : _toggleButtonStyleNormal))
             {
                 showItems = !showItems;
             }
         }
 
-        private void DisplayEventsHeader(GUIStyle headerLabel)
+        private void DisplayRefreshButton()
         {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("#",headerLabel);
-            EditorGUILayout.LabelField("Interaction Data",headerLabel);
+            if (GUILayout.Button("Refresh"))
+            {
+                _eventService.ResetSubscriptions();
+                _eventService.UpdatePayload();
+                _fileWriter.Write(_jsonFilePath, _eventService.Payload);
+                AssetDatabase.Refresh();
+            }
             EditorGUILayout.Space();
-            EditorGUILayout.EndHorizontal();
         }
 
-        private void DisplayEvents(GUIStyle wrapStyle, EventModelCollection collection)
+        private void DisplayEventsHeader(GUIStyle prefixStyle, GUIStyle headerLabel)
+        {
+            EditorGUILayout.BeginHorizontal();
+            GUILayout.Label("#", prefixStyle, GUILayout.MaxWidth(prefixStyle.fixedWidth));
+            GUILayout.Label("Interaction Data", headerLabel);
+            EditorGUILayout.EndHorizontal();
+            EditorGUILayout.Space();
+        }
+
+        private void DisplayEvents(GUIStyle prefixStyle, GUIStyle wrapStyle, EventModelCollection collection)
         {
             _verticalScrollPosition = EditorGUILayout.BeginScrollView(_verticalScrollPosition);
             int totalIndex = 0;
 
             if (_showToggles)
             {
-                totalIndex = DisplayCategory(totalIndex, wrapStyle, collection.ToggleEvents);
+                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.ToggleEvents);
             }
 
             if (_showDropdowns)
             {
-                totalIndex = DisplayCategory(totalIndex, wrapStyle, collection.DropdownEvents);
+                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.DropdownEvents);
             }
 
             if (_showTextInputs)
             {
-                totalIndex = DisplayCategory(totalIndex, wrapStyle, collection.TextInputEvents);
+                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.TextInputEvents);
             }
 
             if (_showTouches)
             {
-                totalIndex = DisplayCategory(totalIndex, wrapStyle, collection.TouchEvents);
+                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.TouchEvents);
             }
 
             EditorGUILayout.EndScrollView();
         }
 
-        private int DisplayCategory<TModel>(int totalIndex, GUIStyle guiStyle, List<TModel> events) where TModel : EventModelBase
+        private int DisplayCategory<TModel>(int totalIndex, GUIStyle prefixStyle, GUIStyle guiStyle, List<TModel> events) where TModel : EventModelBase
         {
             for (int i = 0; i < events.Count; i++)
             {
                 var item = events[i];
-                if (DisplayItem(totalIndex, item, guiStyle))
+                if (DisplayItem(totalIndex, item, prefixStyle, guiStyle))
                 {
                     totalIndex++;
                 }
@@ -200,30 +220,33 @@ namespace BRM.InteractionRecorder.UnityEditor
             return totalIndex;
         }
 
-        private bool DisplayItem<TModel>(int totalIndex, TModel item, GUIStyle guiStyle) where TModel : EventModelBase
+        private bool DisplayItem<TModel>(int totalIndex, TModel item, GUIStyle prefixStyle, GUIStyle guiStyle) where TModel : EventModelBase
         {
-            var fieldJson = JsonUtility.ToJson(item, true);
-            if (_useSearch && !fieldJson.ToLowerInvariant().Contains(_searchTerm.ToLowerInvariant()) || (!_showSubscribedEvents && item.IsFromEventSubscription) || (!_showNonSubscribedEvents && !item.IsFromEventSubscription))
+            var fieldJson = _serializer.AsString(item, true);
+            if (_useSearch && !fieldJson.ToLowerInvariant().Contains(_searchTerm.ToLowerInvariant()) || (!_showSubscribedEvents && item.IsFromEventSubscription) ||
+                (!_showNonSubscribedEvents && !item.IsFromEventSubscription))
             {
                 return false;
             }
-            
+
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.PrefixLabel((totalIndex + 1).ToString());
-            EditorGUILayout.LabelField(fieldJson, guiStyle);
+            GUILayout.Label((totalIndex + 1).ToString(), prefixStyle, GUILayout.MaxWidth(prefixStyle.fixedWidth));
+            GUILayout.Label(fieldJson, guiStyle);
             EditorGUILayout.EndHorizontal();
             return true;
         }
+
         #endregion
 
         #region File Writing
+
         private void Update()
         {
             if (!Application.isPlaying && _wasPlaying)
             {
                 OnEditorStop();
             }
-            
+
             if (!Application.isPlaying)
             {
                 _wasPlaying = false;
@@ -236,21 +259,22 @@ namespace BRM.InteractionRecorder.UnityEditor
             {
                 OnClick();
             }
+
             _wasPlaying = true;
         }
 
         private void OnClick()
         {
-            var standardTouch = _eventService.GetCollector<StandardTouchSubscriber>();
-            if (standardTouch != null)
+            var updators = _eventService.GetUpdaters();
+            updators.ForEach(updator =>
             {
-                _onUpdate -= standardTouch.OnUpdate;
-                _onUpdate += standardTouch.OnUpdate;
-            }
+                _onUpdate -= updator.OnUpdate;
+                _onUpdate += updator.OnUpdate;
+            });
             _eventService.ResetSubscriptions();
             _eventService.UpdatePayload();
             _fileWriter.Write(_jsonFilePath, _eventService.Payload);
-            
+
             Repaint();
         }
 
@@ -259,6 +283,7 @@ namespace BRM.InteractionRecorder.UnityEditor
             _jsonFilePath = null;
             AssetDatabase.Refresh();
         }
+
         #endregion
     }
 }

@@ -5,7 +5,7 @@ using BRM.InteractionRecorder.UnityUi.Models;
 
 namespace BRM.InteractionRecorder.UnityUi.Subscribers
 {
-    public class SubscriberCollection : UiEventSubscriber, IAddCollectors, IAddSubscribers
+    public class SubscriberCollection : UiEventSubscriber, ISubscriberCollection
     {
         public override string Name => nameof(SubscriberCollection);
         private readonly List<UiEventSubscriber> _subscribers = new List<UiEventSubscriber>();
@@ -80,14 +80,10 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
 
             return collection;
         }
-
-        public T GetSubscriber<T>() where T : UiEventSubscriber
+        
+        public List<IUpdate> GetUpdaters()
         {
-            return _subscribers.Find(sub => sub.Name == nameof(T)) as T;
-        }
-        public T GetCollector<T>() where T : UiEventCollector
-        {
-            return _collectors.Find(sub => sub.Name == nameof(T)) as T;
+            return _collectors.Where(sub => sub is IUpdate).Cast<IUpdate>().ToList();
         }
     }
 }

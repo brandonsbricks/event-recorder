@@ -52,7 +52,7 @@
     <Compile Include="Scripts\Constants.cs" />
     <Compile Include="Scripts\EventService.cs" />
     <Compile Include="Scripts\UnityEventServiceFactory.cs" />
-    <Compile Include="Scripts\InteractionGatherer.cs" />
+    <Compile Include="Scripts\UnityInteractionGatherer.cs" />
     <Compile Include="Scripts\Interfaces\Interfaces.cs" />
     <Compile Include="Scripts\Models\ConfigData.cs" />
     <Compile Include="Scripts\Models\EventModels.cs" />

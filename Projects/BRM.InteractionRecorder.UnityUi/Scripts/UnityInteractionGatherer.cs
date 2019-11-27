@@ -1,40 +1,27 @@
 ﻿using System;
 using UnityEngine;
 using BRM.InteractionRecorder.UnityUi.Models;
-using BRM.InteractionRecorder.UnityUi.Subscribers;
 
 namespace BRM.InteractionRecorder.UnityUi
 {
-    public class InteractionGatherer : MonoBehaviour
+    public class UnityInteractionGatherer : MonoBehaviour
     {
-        protected virtual EventService _eventService
-        {
-            get
-            {
-                if (_eventServiceLocal == null)
-                {
-                    _eventServiceLocal = new UnityEventServiceFactory().Create();
-                }
-
-                return _eventServiceLocal;
-            }
-        }
-        
         [SerializeField] private bool _recording;
-        private EventService _eventServiceLocal;
-        private event Action _onUpdate;
         
+        protected virtual EventService _eventService => _eventServiceLocal ?? (_eventServiceLocal = new UnityEventServiceFactory().Create());
+        protected EventService _eventServiceLocal;
+        private event Action _onUpdate;
 
         #region Public
         /// <summary>
         /// Use this to define which events get collected
         /// Set this during the Awake/Start function of a Monobehavior
-        /// The <typeparam name="EventCollectorServiceGenerator"/> will generate a default set of event collectors if
+        /// The <typeparamref name="UnityEventServiceFactory"/> will generate a default set of event collectors if
         /// this is not used
         /// </summary>
-        public void SetEventCollectorService(EventService collector)
+        public void SetEventCollectorService(EventService service)
         {
-            _eventServiceLocal = collector;
+            _eventServiceLocal = service;
         }
 
         public EventAndAppPayload GetPayload()
@@ -51,19 +38,19 @@ namespace BRM.InteractionRecorder.UnityUi
         public void ToggleRecording(bool record)
         {
             _recording = record;
-            var standardTouch = _eventService.GetCollector<StandardTouchSubscriber>();//todo: refactor for grabbing any/all implementers of IUpdate
-            if (standardTouch != null)
+            var updaters = _eventService.GetUpdaters();
+            updaters.ForEach(updater =>
             {
                 if (!record)
                 {
-                    _onUpdate -= standardTouch.OnUpdate;
+                    _onUpdate -= updater.OnUpdate;
                 }
                 else
                 {
-                    _onUpdate -= standardTouch.OnUpdate;
-                    _onUpdate += standardTouch.OnUpdate;
+                    _onUpdate -= updater.OnUpdate;
+                    _onUpdate += updater.OnUpdate;
                 }
-            }
+            });
             
             _eventService.ToggleRecording(record);
         }
@@ -77,9 +64,9 @@ namespace BRM.InteractionRecorder.UnityUi
 
         private void Update()
         {
-            if (_onUpdate != null && _recording)
+            if (_recording)
             {
-                _onUpdate();
+                _onUpdate?.Invoke();
             }
             
             if (!_recording || !(Input.GetMouseButtonDown(MouseButton.Left) || Input.GetMouseButtonUp(MouseButton.Left)))
@@ -95,12 +82,12 @@ namespace BRM.InteractionRecorder.UnityUi
 
         private void ResetSubscriptions()
         {
-            var standardTouch = _eventService.GetCollector<StandardTouchSubscriber>();//todo: refactor for grabbing any/all implementers of IUpdate
-            if (standardTouch != null)
+            var updaters = _eventService.GetUpdaters();
+            updaters.ForEach(updater =>
             {
-                _onUpdate -= standardTouch.OnUpdate;
-                _onUpdate += standardTouch.OnUpdate;
-            }
+                _onUpdate -= updater.OnUpdate;
+                _onUpdate += updater.OnUpdate;
+            });
             _eventService.ResetSubscriptions();
         }
         #endregion

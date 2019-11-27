@@ -36,6 +36,7 @@
     <Compile Include="Scripts\Subscribers\TmpDropdownSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\TmpTextInputSubscriber.cs" />
     <Compile Include="Scripts\TmpEventServiceFactory.cs" />
+    <Compile Include="Scripts\TmpInteractionGatherer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

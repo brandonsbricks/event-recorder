@@ -10,15 +10,9 @@ namespace BRM.InteractionRecorder.UnityUi.Interfaces
         string GetJson();
     }
     
-    public interface IAddSubscribers
+    public interface ISubscriberCollection
     {
         void AddUniqueSubscriber(UiEventSubscriber subscriber);
-        T GetSubscriber<T>() where T : UiEventSubscriber;        
-    }
-
-    public interface IAddCollectors
-    {
-        T GetCollector<T>() where T : UiEventCollector;
         void AddUniqueCollector(UiEventCollector collector);
     }
 }

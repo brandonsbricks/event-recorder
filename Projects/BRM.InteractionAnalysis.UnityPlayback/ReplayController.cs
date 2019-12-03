@@ -38,17 +38,17 @@ namespace BRM.InteractionAnalysis.UnityPlayback
                 yield break;
             }
 
-            var firstTimestamp = allEvents[0].TimestampMillis;
+            var firstTimestampMillis = allEvents[0].TimestampMillis;
 
-            float GetTimeSinceStart(long eventTimestamp)
+            float GetTimeSinceStartSeconds(long timeStampMillis)
             {
-                return eventTimestamp - firstTimestamp;
+                return (timeStampMillis - firstTimestampMillis) / 1000f;
             }
 
             for (int i = 0; i < allEvents.Count; i++)
             {
                 var currentEvent = allEvents[i];
-                var timeToWait = GetTimeSinceStart(currentEvent.TimestampMillis);
+                var timeToWait = GetTimeSinceStartSeconds(currentEvent.TimestampMillis);
                 if (!Mathf.Approximately(0, timeToWait))
                 {
                     yield return new WaitForSeconds(timeToWait);

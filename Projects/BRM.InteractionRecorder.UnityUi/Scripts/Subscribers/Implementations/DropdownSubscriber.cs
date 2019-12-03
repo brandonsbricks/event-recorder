@@ -36,6 +36,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
                     PropertyName = "value",
                     NewIntValue = newValue,
                     NewStringValue = dropdown.options[newValue].text,
+                    EventType = DropdownEvent.UnityDropdownEvent
                 };
                 PopulateCommonEventData(newEvent, dropdown.transform);
                 _dropdownChangedEvents.Add(newEvent);

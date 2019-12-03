@@ -9,9 +9,6 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     public abstract class EventModelBase : IEquatable<EventModelBase>
     {
         public string EventType;
-        public string ComponentType;
-        public string GameObjectName;
-        public string SceneName;
         public long TimestampMillis;
         public bool IsFromEventSubscription;
 
@@ -29,52 +26,96 @@ namespace BRM.InteractionRecorder.UnityUi.Models
 
             return
                 TimestampMillis == other.TimestampMillis &&
-                EventType == other.EventType &&
-                ComponentType == other.ComponentType &&
-                GameObjectName == other.GameObjectName &&
-                SceneName == other.SceneName;
+                EventType == other.EventType;
         }
 
         protected static long UnixTime => (long) DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
     }
 
     [Serializable]
-    public class TouchEvent : EventModelBase
+    public abstract class ComponentEventModel : EventModelBase, IEquatable<ComponentEventModel>
     {
-        protected override string _eventTypeName => nameof(TouchEvent);
-        public TouchEvent()
+        public string ComponentType;
+        public string GameObjectName;
+        
+        public bool Equals(ComponentEventModel other)
         {
-            TimestampMillis = UnixTime;
+            if (other == null) return false;
+
+            return Equals(other as EventModelBase) &&
+                   ComponentType == other.ComponentType &&
+                   GameObjectName == other.GameObjectName;
         }
-
-        public TouchEvent(EventModelBase model)
-        {
-            SceneName = model.SceneName;
-            GameObjectName = model.GameObjectName;
-            ComponentType = model.ComponentType;
-            TimestampMillis = UnixTime;
-        }
-
-        public Vector3S TouchPointProp
-        {
-            get => TouchPointPixels;
-            set => TouchPointPixels = value;
-        }
-
-        [SerializeField] private Vector3S TouchPointPixels;
-
-        //generic touch events
-        public const string ButtonClick = "ButtonClickEvent";
-        public const string Tap = "TapEvent";
-        public const string TouchDown = "TouchDownEvent";
-        public const string TouchUp = "TouchUpEvent";
-        public const string EventTriggerDown = "EventTriggerDown";
-        public const string EventTriggerUp = "EventTriggerUp";
-        public const string EventTriggerTap = "EventTriggerTap";
     }
 
     [Serializable]
-    public class DropdownEvent : TouchEvent
+    public class SceneChangedEvent : EventModelBase
+    {
+        public string OldSceneName;
+        public string NewSceneName;
+        protected override string _eventTypeName => nameof(SceneChangedEvent);
+    }
+
+    
+    [Serializable]
+    public class SimpleTouchEvent : EventModelBase
+    {
+        protected override string _eventTypeName => nameof(SimpleTouchEvent);
+        
+        public Vector3 TouchPointProp
+        {
+            get => new Vector3(TouchPointPixels.x, TouchPointPixels.y);
+            set => TouchPointPixels = new Vector2Int((int) value.x, (int) value.y);
+        }
+
+        [SerializeField] private Vector2Int TouchPointPixels;
+        
+        public const string TouchDown = "TouchDownEvent";
+        public const string TouchUp = "TouchUpEvent";
+    }
+
+    [Serializable]
+    public abstract class ComponentTouchEvent : ComponentEventModel
+    {
+        public Vector3 TouchPoint
+        {
+            get => new Vector3(TouchPointPixels.x, TouchPointPixels.y);
+            set => TouchPointPixels = new Vector2Int((int) value.x, (int) value.y);
+        }
+
+        [SerializeField] private Vector2Int TouchPointPixels;
+
+    }
+
+    [Serializable]
+    public class ButtonEvent : ComponentTouchEvent
+    {
+        protected override string _eventTypeName => nameof(ButtonEvent);
+        public ButtonEvent() : base()
+        {
+            IsFromEventSubscription = true;
+        }
+    }
+    
+    [Serializable]
+    public class EventTriggerEvent : ComponentTouchEvent
+    {
+        protected override string _eventTypeName => EventTriggerUnknownEvent;
+
+        public EventTriggerEvent(string eventType) : base()
+        {
+            EventType = eventType;
+            IsFromEventSubscription = true;
+        }
+        //event trigger touch events
+        public const string EventTriggerDownEvent = nameof(EventTriggerDownEvent);
+        public const string EventTriggerUpEvent = nameof(EventTriggerUpEvent);
+        public const string EventTriggerClickEvent = nameof(EventTriggerClickEvent);
+        public const string EventTriggerUnknownEvent = nameof(EventTriggerUnknownEvent);
+    }
+    
+    [Serializable]
+    public class DropdownEvent : ComponentTouchEvent
     {
         protected override string _eventTypeName => nameof(DropdownEvent);
         public DropdownEvent() : base()
@@ -85,10 +126,13 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         public string PropertyName;
         public int NewIntValue;
         public string NewStringValue;
+
+        public const string UnityDropdownEvent = nameof(UnityDropdownEvent);
+        public const string TmpDropdownEvent = nameof(TmpDropdownEvent);
     }
 
     [Serializable]
-    public class ToggleEvent : TouchEvent
+    public class ToggleEvent : ComponentTouchEvent
     {
         protected override string _eventTypeName => nameof(ToggleEvent);
         public ToggleEvent() : base()
@@ -101,7 +145,7 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     }
 
     [Serializable]
-    public class TextInputEvent : EventModelBase
+    public class TextInputEvent : ComponentEventModel
     {
         public string PropertyName;
         public string NewValue;
@@ -111,6 +155,9 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         {
             IsFromEventSubscription = true;
         }
+
+        public const string UnityTextInputEvent = nameof(UnityTextInputEvent);
+        public const string TmpTextInputEvent = nameof(TmpTextInputEvent);
     }
 
     [Serializable]
@@ -118,13 +165,20 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     {
         public string AppVersion;
         public string UnityVersion;
-        
+
+        public string GitSha = "";
         public string Server = "unassigned";
 
         public void SetProperties()
         {
             AppVersion = Application.version;
             UnityVersion = Application.unityVersion;
+        }
+
+        public void SetValues(string gitSha, string server = "unassigned")
+        {
+            GitSha = gitSha;
+            Server = server;
         }
     }
 
@@ -137,7 +191,7 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         public string GraphicsDeviceType;
         public int MemorySizeMB;
         public string OperatingSystemFamily;
-        public Vector3S ScreenSizePixels;
+        public Vector2Int ScreenSizePixels;
         
         public void SetProperties()
         {
@@ -147,46 +201,70 @@ namespace BRM.InteractionRecorder.UnityUi.Models
             GraphicsDeviceType = SystemInfo.graphicsDeviceType.ToString();
             MemorySizeMB = SystemInfo.systemMemorySize;
             OperatingSystemFamily = SystemInfo.operatingSystemFamily.ToString();
-            ScreenSizePixels = new Vector3S(Screen.width, Screen.height, 0);
+            ScreenSizePixels = new Vector2Int(Screen.width, Screen.height);
         }
     }
 
     [Serializable]
     public class EventModelCollection
     {
-        public List<TouchEvent> TouchEvents = new List<TouchEvent>();
+        public List<SceneChangedEvent> SceneChangedEvents = new List<SceneChangedEvent>();
+        public List<SimpleTouchEvent> SimpleTouchEvents = new List<SimpleTouchEvent>();
+        public List<ComponentTouchEvent> ComponentTouchEvents = new List<ComponentTouchEvent>();
         public List<TextInputEvent> TextInputEvents = new List<TextInputEvent>();
         public List<DropdownEvent> DropdownEvents = new List<DropdownEvent>();
         public List<ToggleEvent> ToggleEvents = new List<ToggleEvent>();
 
+        public List<EventModelBase> GetAllEvents()
+        {
+            var allEvents = new List<EventModelBase>();
+            allEvents.AddRange(SceneChangedEvents);
+            allEvents.AddRange(SimpleTouchEvents);
+            allEvents.AddRange(ComponentTouchEvents);
+            allEvents.AddRange(TextInputEvents);
+            allEvents.AddRange(DropdownEvents);
+            allEvents.AddRange(ToggleEvents);
+            return allEvents;
+        }
+
+        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + ComponentTouchEvents.Count + TextInputEvents.Count + DropdownEvents.Count + ToggleEvents.Count;
+        
         /// <summary>
         /// Removes any events already in the collection
         /// </summary>
         public void AppendNewEventsUniquely(EventModelCollection newCollection)
         {
-            var uniqueTouches = newCollection.TouchEvents.Where(newEvent => !TouchEvents.Any(tEvent => tEvent.Equals(newEvent)));
-            TouchEvents.AddRange(uniqueTouches);
-
-            var uniqueTextInputs = newCollection.TextInputEvents.Where(newEvent => !TextInputEvents.Any(tEvent => tEvent.Equals(newEvent)));
-            TextInputEvents.AddRange(uniqueTextInputs);
-
-            var uniqueDropdowns = newCollection.DropdownEvents.Where(newEvent => !DropdownEvents.Any(tEvent => tEvent.Equals(newEvent)));
-            DropdownEvents.AddRange(uniqueDropdowns);
-
-            var uniqueToggleEvents = newCollection.ToggleEvents.Where(newEvent => !ToggleEvents.Any(tEvent => tEvent.Equals(newEvent)));
-            ToggleEvents.AddRange(uniqueToggleEvents);
+            AddUnique(SceneChangedEvents, newCollection.SceneChangedEvents);
+            AddUnique(SimpleTouchEvents, newCollection.SimpleTouchEvents);
+            AddUnique(ComponentTouchEvents, newCollection.ComponentTouchEvents);
+            AddUnique(TextInputEvents, newCollection.TextInputEvents);
+            AddUnique(DropdownEvents, newCollection.DropdownEvents);
+            AddUnique(ToggleEvents, newCollection.ToggleEvents);
         }
-
+        
         public void SortByTimestamp()
         {
             Func<EventModelBase, long> orderFunc = item => item.TimestampMillis;
-            TouchEvents = TouchEvents.OrderBy(item => orderFunc).ToList();
+            
+            SceneChangedEvents = SceneChangedEvents.OrderBy(item => orderFunc).ToList();
+            SimpleTouchEvents = SimpleTouchEvents.OrderBy(item => orderFunc).ToList();
+            ComponentTouchEvents = ComponentTouchEvents.OrderBy(item => orderFunc).ToList();
             TextInputEvents = TextInputEvents.OrderBy(item => orderFunc).ToList();
             DropdownEvents = DropdownEvents.OrderBy(item => orderFunc).ToList();
             ToggleEvents = ToggleEvents.OrderBy(item => orderFunc).ToList();
         }
 
-        public int EventCount => TouchEvents.Count + TextInputEvents.Count + DropdownEvents.Count + ToggleEvents.Count;
+        private IEnumerable<T> GetUnique<T>(IEnumerable<T> existingList, IEnumerable<T> newList) where T : class
+        {
+            var uniqueItems = newList.Where(newEvent => !existingList.Any(tEvent => tEvent.Equals(newEvent)));
+            return uniqueItems;
+        }
+
+        private void AddUnique<T>(List<T> existingList, IEnumerable<T> newList) where T : class
+        {
+            var unique = GetUnique(existingList, newList);
+            existingList.AddRange(unique);
+        }
     }
 
     [Serializable]

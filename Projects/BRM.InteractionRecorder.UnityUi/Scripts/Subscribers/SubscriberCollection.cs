@@ -73,7 +73,9 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
                 eventCollectionList.Add(events);
             });
 
-            collection.TouchEvents = eventCollectionList.SelectMany(col => col.TouchEvents).ToList();
+            collection.SceneChangedEvents = eventCollectionList.SelectMany(col => col.SceneChangedEvents).ToList();
+            collection.SimpleTouchEvents = eventCollectionList.SelectMany(col => col.SimpleTouchEvents).ToList();
+            collection.ComponentTouchEvents = eventCollectionList.SelectMany(col => col.ComponentTouchEvents).ToList();
             collection.ToggleEvents = eventCollectionList.SelectMany(col => col.ToggleEvents).ToList();
             collection.DropdownEvents = eventCollectionList.SelectMany(col => col.DropdownEvents).ToList();
             collection.TextInputEvents = eventCollectionList.SelectMany(col => col.TextInputEvents).ToList();

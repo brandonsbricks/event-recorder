@@ -5,12 +5,12 @@ using UnityEngine.UI;
 
 namespace BRM.InteractionRecorder.UnityUi.Subscribers
 {
-    public class ButtonSubscriber : TouchSubscriber<Button, TouchEvent>
+    public class ButtonSubscriber : TouchSubscriber<Button, ButtonEvent>
     {
         public override string Name => nameof(ButtonSubscriber);
         
         private readonly List<UnityAction> _onClicks = new List<UnityAction>();
-        private readonly List<TouchEvent> _events = new List<TouchEvent>();
+        private readonly List<ButtonEvent> _events = new List<ButtonEvent>();
 
         public override void UnsubscribeAll()
         {
@@ -21,7 +21,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         public override EventModelCollection ExtractNewEvents()
         {
             var collection = new EventModelCollection();
-            collection.TouchEvents.AddRange(_events);
+            collection.ComponentTouchEvents.AddRange(_events);
             _events.Clear();
             return collection;
         }
@@ -31,11 +31,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         {
             UnityAction onClick = () =>
             {
-                var newEvent = new TouchEvent
-                {
-                    IsFromEventSubscription = true,
-                    EventType = TouchEvent.ButtonClick,
-                };
+                var newEvent = new ButtonEvent();
                 PopulateCommonEventData(newEvent, button.transform);
                 _events.Add(newEvent);
             };

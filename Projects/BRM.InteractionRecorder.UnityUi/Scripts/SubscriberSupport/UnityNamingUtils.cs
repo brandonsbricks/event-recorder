@@ -6,7 +6,10 @@ namespace BRM.InteractionRecorder.UnityUi
 {
     public static class UnityNamingUtils
     {
-        private const string _indexCharacterSeparator = ";i=";
+        public const string IndexCharacterSeparator = ";i=";
+        public const char GameObjectHierarchySeparatorChr = '/';
+        public const string GameObjectHierarchySeparatorStr = "/";
+        public const string ComponentSeparator = ";";
 
         public static string GetHierarchyName(Transform tran)
         {
@@ -28,7 +31,7 @@ namespace BRM.InteractionRecorder.UnityUi
                 if (!IsUniqueName(currentTransform))
                 {
                     int sibIndex = currentTransform.GetSiblingIndex();
-                    uniqueName = $"{uniqueName}{_indexCharacterSeparator}{sibIndex}";
+                    uniqueName = $"{uniqueName}{IndexCharacterSeparator}{sibIndex}";
                 }
                 names.Add(uniqueName);
                 currentTransform = currentTransform.parent;
@@ -45,7 +48,7 @@ namespace BRM.InteractionRecorder.UnityUi
                 finalName.Append(names[i]);
                 if (i > 0)
                 {
-                    finalName.Append("/");
+                    finalName.Append(GameObjectHierarchySeparatorChr);
                 }
             }
 
@@ -66,7 +69,7 @@ namespace BRM.InteractionRecorder.UnityUi
                 builder.Append(comp.GetType());//todo: measure performance, maybe work around the reflection
                 if (i < components.Count - 1)
                 {
-                    builder.Append(';');
+                    builder.Append(ComponentSeparator);
                 }
             }
 

@@ -33,7 +33,8 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
                 var newEvent = new TextInputEvent
                 {
                     PropertyName = "text",
-                    NewValue = newValue
+                    NewValue = newValue,
+                    EventType = TextInputEvent.UnityTextInputEvent
                 };
                 PopulateCommonEventData(newEvent, inputField.transform);
                 _events.Add(newEvent);

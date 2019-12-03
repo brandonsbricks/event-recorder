@@ -38,6 +38,7 @@ namespace BRM.InteractionRecorder.TmpUi.Subscribers
                     PropertyName = "value",
                     NewIntValue = newValue,
                     NewStringValue = tmpDropdown.options[newValue].text,
+                    EventType = DropdownEvent.TmpDropdownEvent
                 };
                 PopulateCommonEventData(newEvent, tmpDropdown.transform);
                 _dropdownChangedEvents.Add(newEvent);

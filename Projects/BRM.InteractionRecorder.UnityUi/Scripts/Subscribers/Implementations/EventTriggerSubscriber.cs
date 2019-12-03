@@ -5,12 +5,12 @@ using UnityEngine.EventSystems;
 
 namespace BRM.InteractionRecorder.UnityUi.Subscribers
 {
-    public class EventTriggerSubscriber : SelectableSubscriber<EventTrigger, TouchEvent>
+    public class EventTriggerSubscriber : SelectableSubscriber<EventTrigger, EventTriggerEvent>
     {
         public override string Name => nameof(EventTriggerSubscriber);
         
         private readonly List<UnityAction<BaseEventData>> _onClicks = new List<UnityAction<BaseEventData>>();
-        private readonly List<TouchEvent> _events = new List<TouchEvent>();
+        private readonly List<EventTriggerEvent> _events = new List<EventTriggerEvent>();
 
         public override void UnsubscribeAll()
         {
@@ -21,7 +21,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         public override EventModelCollection ExtractNewEvents()
         {
             var collection = new EventModelCollection();
-            collection.TouchEvents.AddRange(_events);
+            collection.ComponentTouchEvents.AddRange(_events);
             _events.Clear();
             return collection;
         }
@@ -51,14 +51,9 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
             {
                 return;
             }
-            UnityAction<BaseEventData> onClick = (data) =>
+            UnityAction<BaseEventData> onClick = data =>
             {
-                var newEvent = new TouchEvent
-                {
-                    IsFromEventSubscription = true,
-                    EventType = TriggerTypeToString(type),
-                };
-
+                var newEvent = new EventTriggerEvent(TriggerTypeToString(type));
                 PopulateCommonEventData(newEvent, eventTrigger.transform);
                 _events.Add(newEvent);
             };
@@ -87,16 +82,16 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
             clickTrigger?.callback.RemoveListener(onClick);
         }
 
-        private static string TriggerTypeToString(EventTriggerType type)
+        public static string TriggerTypeToString(EventTriggerType type)
         {
             switch (type)
             {
-                case EventTriggerType.PointerDown: return TouchEvent.EventTriggerDown;
-                case EventTriggerType.PointerUp: return TouchEvent.EventTriggerUp;
-                case EventTriggerType.PointerClick: return TouchEvent.EventTriggerTap;
+                case EventTriggerType.PointerDown: return EventTriggerEvent.EventTriggerDownEvent;
+                case EventTriggerType.PointerUp: return EventTriggerEvent.EventTriggerUpEvent;
+                case EventTriggerType.PointerClick: return EventTriggerEvent.EventTriggerClickEvent;
             }
 
-            return TouchEvent.Tap;
+            return EventTriggerEvent.EventTriggerUnknownEvent;
         }
     }
 }

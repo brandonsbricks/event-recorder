@@ -64,17 +64,17 @@ namespace BRM.InteractionRecorder.UnityUi
 
         private void Update()
         {
-            if (_recording)
-            {
-                _onUpdate?.Invoke();
-            }
-            
-            if (!_recording || !(Input.GetMouseButtonDown(MouseButton.Left) || Input.GetMouseButtonUp(MouseButton.Left)))
+            if (!_recording)
             {
                 return;
             }
+            _onUpdate?.Invoke();
+            
+            if (Input.GetMouseButtonDown(MouseButton.Left) || Input.GetMouseButtonUp(MouseButton.Left))
+            {
+                ResetSubscriptions();
+            }
 
-            ResetSubscriptions();
         }
         #endregion
         

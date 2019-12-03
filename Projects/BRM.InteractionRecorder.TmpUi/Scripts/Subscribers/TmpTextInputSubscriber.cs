@@ -31,12 +31,13 @@ namespace BRM.InteractionRecorder.TmpUi.Subscribers
         
         protected override void OnSubscribe(TMP_InputField tmpInput)
         {
-            UnityAction<string> onInputFieldEndEdit = (newValue) =>
+            UnityAction<string> onInputFieldEndEdit = newValue =>
             {
                 var newEvent = new TextInputEvent
                 {
                     PropertyName = "text",
-                    NewValue = newValue
+                    NewValue = newValue,
+                    EventType = TextInputEvent.TmpTextInputEvent
                 };
                 PopulateCommonEventData(newEvent, tmpInput.transform);
                 _events.Add(newEvent);

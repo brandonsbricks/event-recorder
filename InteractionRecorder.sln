@@ -8,6 +8,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionRecorder.Tmp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionRecorder.TmpEditor", "Projects\BRM.InteractionRecorder.TmpEditor\BRM.InteractionRecorder.TmpEditor.csproj", "{8628782E-72EC-4346-B5CD-BA2220F91B96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionAnalysis.UnityPlayback", "Projects\BRM.InteractionAnalysis.UnityPlayback\BRM.InteractionAnalysis.UnityPlayback.csproj", "{FE4EC2C1-69F5-43FF-AC4E-5520E771FB54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.InteractionAnalysis.TmpPlayback", "Projects\BRM.InteractionAnalysis.TmpPlayback\BRM.InteractionAnalysis.TmpPlayback.csproj", "{B13C275B-A939-48FB-833B-2A5024D9D0B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{8628782E-72EC-4346-B5CD-BA2220F91B96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8628782E-72EC-4346-B5CD-BA2220F91B96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8628782E-72EC-4346-B5CD-BA2220F91B96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE4EC2C1-69F5-43FF-AC4E-5520E771FB54}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE4EC2C1-69F5-43FF-AC4E-5520E771FB54}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE4EC2C1-69F5-43FF-AC4E-5520E771FB54}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE4EC2C1-69F5-43FF-AC4E-5520E771FB54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

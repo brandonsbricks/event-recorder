@@ -11,6 +11,7 @@ namespace BRM.InteractionRecorder.UnityUi
                 new List<UiEventSubscriber>
                 {
                     //generic Unity UI subscribers
+                    new SceneChangedSubscriber(),
                     new EventTriggerSubscriber(),
                     new ButtonSubscriber(),
                     new DropdownSubscriber(),
@@ -19,8 +20,8 @@ namespace BRM.InteractionRecorder.UnityUi
                 },
                 new List<UiEventCollector>
                 {
-                    //generic touch positions, not tied to events or callbacks
-                    new StandardTouchSubscriber(),
+                    //generic touch events
+                    new SimpleTouchSubscriber(),
                 });
             return service;
         }

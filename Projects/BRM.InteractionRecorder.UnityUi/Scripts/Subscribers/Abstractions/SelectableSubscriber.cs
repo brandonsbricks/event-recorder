@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace BRM.InteractionRecorder.UnityUi.Subscribers
 {
-    public abstract class SelectableSubscriber<TSelectable, TModel> : UiEventSubscriber where TSelectable : Object where TModel : EventModelBase
+    public abstract class SelectableSubscriber<TSelectable, TModel> : UiEventSubscriber where TSelectable : Object where TModel : ComponentEventModel
     {
         protected abstract void OnSubscribe(TSelectable selectable);
         protected abstract void OnUnsubscribe(TSelectable selectable);
@@ -35,7 +35,6 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         
         protected virtual void PopulateCommonEventData(TModel eventData, Transform componentTransform)
         {
-            eventData.SceneName = SceneManager.GetActiveScene().name;//todo measure performance
             eventData.GameObjectName = UnityNamingUtils.GetHierarchyName(componentTransform);
             eventData.ComponentType = typeof(TSelectable).FullName;//todo: measure performance
         }

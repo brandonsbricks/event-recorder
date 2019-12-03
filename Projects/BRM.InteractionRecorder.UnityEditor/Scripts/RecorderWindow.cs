@@ -45,7 +45,9 @@ namespace BRM.InteractionRecorder.UnityEditor
         private bool _showToggles = true;
         private bool _showDropdowns = true;
         private bool _showTextInputs = true;
-        private bool _showTouches = true;
+        private bool _showComponentTouches = true;
+        private bool _showSimpleTouches = true;
+        private bool _showSceneChanges = true;
         private bool _useSearch = false;
         private bool _showSubscribedEvents = true;
         private bool _showNonSubscribedEvents = true;
@@ -93,10 +95,10 @@ namespace BRM.InteractionRecorder.UnityEditor
 
             DisplayWindowHeader(wrapStyle);
             DisplaySearch();
-            DisplaySubscribers();
+            DisplaySubscriberToggles();
 
             var eventCollection = _eventService.Payload.GetEventModels();
-            DisplayToggles(eventCollection);
+            DisplayEventModelToggles(eventCollection);
 
             DisplayRefreshButton();
             DisplayEventsHeader(prefixStyle, headerLabel);
@@ -113,11 +115,11 @@ namespace BRM.InteractionRecorder.UnityEditor
             EditorGUILayout.Space();
         }
 
-        private void DisplaySubscribers()
+        private void DisplaySubscriberToggles()
         {
             GUILayout.BeginHorizontal();
             DisplayToggleButton($"{(_showSubscribedEvents ? "Hide" : "Show")} Subscribed Events", ref _showSubscribedEvents);
-            DisplayToggleButton($"{(_showNonSubscribedEvents ? "Hide" : "Show")} Non-Subscribed Events (empty-space taps)", ref _showNonSubscribedEvents);
+            DisplayToggleButton($"{(_showNonSubscribedEvents ? "Hide" : "Show")} Non-Subscribed Events", ref _showNonSubscribedEvents);
             GUILayout.EndHorizontal();
         }
 
@@ -133,13 +135,15 @@ namespace BRM.InteractionRecorder.UnityEditor
             GUILayout.EndHorizontal();
         }
 
-        private void DisplayToggles(EventModelCollection collection)
+        private void DisplayEventModelToggles(EventModelCollection collection)
         {
             GUILayout.BeginHorizontal();
+            DisplayToggleButton($"{(_showSceneChanges ? "Hide" : "Show")} Scene Changes", ref _showSceneChanges, collection.SceneChangedEvents.Count);
             DisplayToggleButton($"{(_showToggles ? "Hide" : "Show")} Toggles", ref _showToggles, collection.ToggleEvents.Count);
             DisplayToggleButton($"{(_showDropdowns ? "Hide" : "Show")} Dropdowns", ref _showDropdowns, collection.DropdownEvents.Count);
             DisplayToggleButton($"{(_showTextInputs ? "Hide" : "Show")} Text Inputs", ref _showTextInputs, collection.TextInputEvents.Count);
-            DisplayToggleButton($"{(_showTouches ? "Hide" : "Show")} Touches", ref _showTouches, collection.TouchEvents.Count);
+            DisplayToggleButton($"{(_showComponentTouches ? "Hide" : "Show")} Touches", ref _showComponentTouches, collection.ComponentTouchEvents.Count);
+            DisplayToggleButton($"{(_showSimpleTouches ? "Hide" : "Show")} Touches", ref _showSimpleTouches, collection.SimpleTouchEvents.Count);
             GUILayout.EndHorizontal();
         }
 
@@ -183,6 +187,11 @@ namespace BRM.InteractionRecorder.UnityEditor
             _verticalScrollPosition = EditorGUILayout.BeginScrollView(_verticalScrollPosition);
             int totalIndex = 0;
 
+            if (_showSceneChanges)
+            {
+                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.SceneChangedEvents);
+            }
+            
             if (_showToggles)
             {
                 totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.ToggleEvents);
@@ -198,9 +207,14 @@ namespace BRM.InteractionRecorder.UnityEditor
                 totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.TextInputEvents);
             }
 
-            if (_showTouches)
+            if (_showComponentTouches)
             {
-                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.TouchEvents);
+                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.ComponentTouchEvents);
+            }
+            
+            if (_showSimpleTouches)
+            {
+                totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.SimpleTouchEvents);
             }
 
             EditorGUILayout.EndScrollView();

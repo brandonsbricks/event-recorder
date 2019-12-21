@@ -38,7 +38,6 @@
     <Compile Include="Scripts\TmpEventServiceFactory.cs" />
     <Compile Include="Scripts\TmpInteractionGatherer.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
@@ -63,16 +62,14 @@
       <Name>BRM.InteractionRecorder.UnityUi</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <_dll Include="$(TargetDir)\$(ProjectName).dll" />
-    <_pdb Include="$(TargetDir)\$(ProjectName).pdb" />
-  </ItemGroup>
-  <Target Name="BeforeBuild" Condition=" '$(Configuration)' == 'Release' ">
-    <Delete Files="@(_dll)" />
-    <Delete Files="@(_pdb)" />
-  </Target>
-  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
-    <Copy SourceFiles="@(_dll)" DestinationFolder="$(SolutionDir)\Builds\" ContinueOnError="true" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="@(_pdb)" DestinationFolder="$(SolutionDir)\Builds\" ContinueOnError="true" SkipUnchangedFiles="false" />
-  </Target>
+
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To properly import the build steps project...
+        1. Clone repo from https://github.com/brandonsbricks/build-steps
+        2. In Rider, navigate to File > Settings > Build, Execution, and Deployment > Toolset and Build > MSBuild Global Properties
+            a. Add variable "BUILD_STEPS" with the filePath for the .targets file (eg: "C:\Repos\BuildSteps\BRM.BuildSteps\BRM.BuildSteps.targets")
+        3. Review the comments in this BuildSteps.targets file for proper configuration
+  -->
+  <Import Project="$(BUILD_STEPS)" Condition=" '$(Configuration)' == 'Release' "/>
+  
 </Project>

@@ -70,17 +70,14 @@
     <Compile Include="Scripts\Subscribers\Implementations\ToggleSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\SubscriberCollection.cs" />
   </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <_dll Include="$(TargetDir)\$(ProjectName).dll" />
-    <_pdb Include="$(TargetDir)\$(ProjectName).pdb" />
-  </ItemGroup>
-  <Target Name="BeforeBuild" Condition=" '$(Configuration)' == 'Release' ">
-    <Delete Files="@(_dll)" />
-    <Delete Files="@(_pdb)" />
-  </Target>
-  <Target Name="AfterBuild" Condition=" '$(Configuration)' == 'Release' ">
-    <Copy SourceFiles="@(_dll)" DestinationFolder="$(SolutionDir)\Builds\" ContinueOnError="true" SkipUnchangedFiles="false" />
-    <Copy SourceFiles="@(_pdb)" DestinationFolder="$(SolutionDir)\Builds\" ContinueOnError="true" SkipUnchangedFiles="false" />
-  </Target>
+  <!-- To properly import the build steps project...
+        1. Clone repo from https://github.com/brandonsbricks/build-steps
+        2. In Rider, navigate to File > Settings > Build, Execution, and Deployment > Toolset and Build > MSBuild Global Properties
+            a. Add variable "BUILD_STEPS" with the filePath for the .targets file (eg: "C:\Repos\BuildSteps\BRM.BuildSteps\BRM.BuildSteps.targets")
+        3. Review the comments in this BuildSteps.targets file for proper configuration
+  -->
+  <Import Project="$(BUILD_STEPS)" Condition=" '$(Configuration)' == 'Release' "/>
+  
 </Project>

@@ -74,7 +74,6 @@ namespace BRM.InteractionRecorder.UnityUi
             {
                 ResetSubscriptions();
             }
-
         }
         #endregion
         

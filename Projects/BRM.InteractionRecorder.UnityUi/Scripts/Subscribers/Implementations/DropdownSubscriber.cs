@@ -29,14 +29,13 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         
         protected override void OnSubscribe(Dropdown dropdown)
         {
-            UnityAction<int> onDropdownChanged = (newValue) =>
+            UnityAction<int> onDropdownChanged = newValue =>
             {
-                var newEvent = new DropdownEvent
+                var newEvent = new DropdownEvent("UnityDropdownEvent")
                 {
                     PropertyName = "value",
                     NewIntValue = newValue,
                     NewStringValue = dropdown.options[newValue].text,
-                    EventType = DropdownEvent.UnityDropdownEvent
                 };
                 PopulateCommonEventData(newEvent, dropdown.transform);
                 _dropdownChangedEvents.Add(newEvent);

@@ -21,7 +21,9 @@ namespace BRM.InteractionRecorder.UnityUi
                 new List<UiEventCollector>
                 {
                     //generic touch events
-                    new SimpleTouchSubscriber(),
+                    new SimpleTouchCollector(),
+                    new PointerHandlerCollector()
+                    
                 });
             return service;
         }

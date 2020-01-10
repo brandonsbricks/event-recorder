@@ -12,11 +12,9 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         public long TimestampMillis;
         public bool IsFromEventSubscription;
 
-        protected abstract string _eventTypeName { get; }
-
-        protected EventModelBase()
+        protected EventModelBase(string eventTypeName)
         {
-            EventType = _eventTypeName;
+            EventType = eventTypeName;
             TimestampMillis = UnixTime;
         }
 
@@ -37,7 +35,11 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     {
         public string ComponentType;
         public string GameObjectName;
-        
+
+        protected ComponentEventModel(string eventTypeName) : base(eventTypeName)
+        {
+        }
+
         public bool Equals(ComponentEventModel other)
         {
             if (other == null) return false;
@@ -53,15 +55,20 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     {
         public string OldSceneName;
         public string NewSceneName;
-        protected override string _eventTypeName => nameof(SceneChangedEvent);
+
+        public SceneChangedEvent() : base(nameof(SceneChangedEvent))
+        {
+        }
     }
 
     
     [Serializable]
     public class SimpleTouchEvent : EventModelBase
     {
-        protected override string _eventTypeName => nameof(SimpleTouchEvent);
-        
+        public SimpleTouchEvent() : base(nameof(SimpleTouchEvent))
+        {
+        }
+
         public Vector3 TouchPointProp
         {
             get => new Vector3(TouchPointPixels.x, TouchPointPixels.y);
@@ -75,50 +82,38 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     }
 
     [Serializable]
-    public abstract class ComponentTouchEvent : ComponentEventModel
+    public class ComponentTouchEvent : ComponentEventModel
     {
         public Vector3 TouchPoint
         {
             get => new Vector3(TouchPointPixels.x, TouchPointPixels.y);
             set => TouchPointPixels = new Vector2Int((int) value.x, (int) value.y);
         }
-
+        
         [SerializeField] private Vector2Int TouchPointPixels;
 
-    }
-
-    [Serializable]
-    public class ButtonEvent : ComponentTouchEvent
-    {
-        protected override string _eventTypeName => nameof(ButtonEvent);
-        public ButtonEvent() : base()
+        public ComponentTouchEvent(string eventTypeName) : base(eventTypeName)
         {
-            IsFromEventSubscription = true;
         }
-    }
-    
-    [Serializable]
-    public class EventTriggerEvent : ComponentTouchEvent
-    {
-        protected override string _eventTypeName => EventTriggerUnknownEvent;
 
-        public EventTriggerEvent(string eventType) : base()
-        {
-            EventType = eventType;
-            IsFromEventSubscription = true;
-        }
-        //event trigger touch events
         public const string EventTriggerDownEvent = nameof(EventTriggerDownEvent);
         public const string EventTriggerUpEvent = nameof(EventTriggerUpEvent);
         public const string EventTriggerClickEvent = nameof(EventTriggerClickEvent);
         public const string EventTriggerUnknownEvent = nameof(EventTriggerUnknownEvent);
+
+        public const string ButtonEvent = nameof(ButtonEvent);
+        
+        public const string IPointerUpEvent = nameof(IPointerUpEvent);
+        public const string IPointerDownEvent = nameof(IPointerDownEvent);
+        public const string IPointerClickEvent = nameof(IPointerClickEvent);
+        public const string IPointerEnterEvent = nameof(IPointerEnterEvent);
+        public const string IPointerExitEvent = nameof(IPointerExitEvent);
     }
     
     [Serializable]
     public class DropdownEvent : ComponentTouchEvent
     {
-        protected override string _eventTypeName => nameof(DropdownEvent);
-        public DropdownEvent() : base()
+        public DropdownEvent(string eventTypeName) : base(eventTypeName)
         {
             IsFromEventSubscription = true;
         }
@@ -126,16 +121,13 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         public string PropertyName;
         public int NewIntValue;
         public string NewStringValue;
-
         public const string UnityDropdownEvent = nameof(UnityDropdownEvent);
-        public const string TmpDropdownEvent = nameof(TmpDropdownEvent);
     }
 
     [Serializable]
     public class ToggleEvent : ComponentTouchEvent
     {
-        protected override string _eventTypeName => nameof(ToggleEvent);
-        public ToggleEvent() : base()
+        public ToggleEvent() : base(nameof(ToggleEvent))
         {
             IsFromEventSubscription = true;
         }
@@ -149,15 +141,12 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     {
         public string PropertyName;
         public string NewValue;
-        protected override string _eventTypeName => nameof(TextInputEvent);
+        public const string UnityTextInputEvent = nameof(UnityTextInputEvent);
         
-        public TextInputEvent() : base()
+        public TextInputEvent(string eventTypeName) : base(eventTypeName)
         {
             IsFromEventSubscription = true;
         }
-
-        public const string UnityTextInputEvent = nameof(UnityTextInputEvent);
-        public const string TmpTextInputEvent = nameof(TmpTextInputEvent);
     }
 
     [Serializable]

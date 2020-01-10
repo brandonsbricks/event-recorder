@@ -28,13 +28,12 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         
         protected override void OnSubscribe(InputField inputField)
         {
-            UnityAction<string> onInputFieldEndEdit = (newValue) =>
+            UnityAction<string> onInputFieldEndEdit = newValue =>
             {
-                var newEvent = new TextInputEvent
+                var newEvent = new TextInputEvent(TextInputEvent.UnityTextInputEvent)
                 {
                     PropertyName = "text",
                     NewValue = newValue,
-                    EventType = TextInputEvent.UnityTextInputEvent
                 };
                 PopulateCommonEventData(newEvent, inputField.transform);
                 _events.Add(newEvent);

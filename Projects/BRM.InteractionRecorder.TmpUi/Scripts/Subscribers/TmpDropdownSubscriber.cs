@@ -33,12 +33,11 @@ namespace BRM.InteractionRecorder.TmpUi.Subscribers
         {
             UnityAction<int> onDropdownChanged = (newValue) =>
             {
-                var newEvent = new DropdownEvent
+                var newEvent = new DropdownEvent(TmpEventNames.TmpDropdownEvent)
                 {
                     PropertyName = "value",
                     NewIntValue = newValue,
                     NewStringValue = tmpDropdown.options[newValue].text,
-                    EventType = DropdownEvent.TmpDropdownEvent
                 };
                 PopulateCommonEventData(newEvent, tmpDropdown.transform);
                 _dropdownChangedEvents.Add(newEvent);

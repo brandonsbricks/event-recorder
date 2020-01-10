@@ -5,12 +5,12 @@ using UnityEngine.EventSystems;
 
 namespace BRM.InteractionRecorder.UnityUi.Subscribers
 {
-    public class EventTriggerSubscriber : SelectableSubscriber<EventTrigger, EventTriggerEvent>
+    public class EventTriggerSubscriber : SelectableSubscriber<EventTrigger, ComponentTouchEvent>
     {
         public override string Name => nameof(EventTriggerSubscriber);
         
         private readonly List<UnityAction<BaseEventData>> _onClicks = new List<UnityAction<BaseEventData>>();
-        private readonly List<EventTriggerEvent> _events = new List<EventTriggerEvent>();
+        private readonly List<ComponentTouchEvent> _events = new List<ComponentTouchEvent>();
 
         public override void UnsubscribeAll()
         {
@@ -53,7 +53,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
             }
             UnityAction<BaseEventData> onClick = data =>
             {
-                var newEvent = new EventTriggerEvent(TriggerTypeToString(type));
+                var newEvent = new ComponentTouchEvent(TriggerTypeToString(type));
                 PopulateCommonEventData(newEvent, eventTrigger.transform);
                 _events.Add(newEvent);
             };
@@ -86,12 +86,12 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         {
             switch (type)
             {
-                case EventTriggerType.PointerDown: return EventTriggerEvent.EventTriggerDownEvent;
-                case EventTriggerType.PointerUp: return EventTriggerEvent.EventTriggerUpEvent;
-                case EventTriggerType.PointerClick: return EventTriggerEvent.EventTriggerClickEvent;
+                case EventTriggerType.PointerDown: return ComponentTouchEvent.EventTriggerDownEvent;
+                case EventTriggerType.PointerUp: return ComponentTouchEvent.EventTriggerUpEvent;
+                case EventTriggerType.PointerClick: return ComponentTouchEvent.EventTriggerClickEvent;
             }
 
-            return EventTriggerEvent.EventTriggerUnknownEvent;
+            return ComponentTouchEvent.EventTriggerUnknownEvent;
         }
     }
 }

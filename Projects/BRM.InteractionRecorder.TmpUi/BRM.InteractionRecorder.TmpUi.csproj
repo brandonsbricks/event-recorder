@@ -35,6 +35,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Subscribers\TmpDropdownSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\TmpTextInputSubscriber.cs" />
+    <Compile Include="Scripts\TmpEventNames.cs" />
     <Compile Include="Scripts\TmpEventServiceFactory.cs" />
     <Compile Include="Scripts\TmpInteractionGatherer.cs" />
   </ItemGroup>
@@ -62,7 +63,6 @@
       <Name>BRM.InteractionRecorder.UnityUi</Name>
     </ProjectReference>
   </ItemGroup>
-
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To properly import the build steps project...
         1. Clone repo from https://github.com/brandonsbricks/build-steps
@@ -70,6 +70,5 @@
             a. Add variable "BUILD_STEPS" with the filePath for the .targets file (eg: "C:\Repos\BuildSteps\BRM.BuildSteps\BRM.BuildSteps.targets")
         3. Review the comments in this BuildSteps.targets file for proper configuration
   -->
-  <Import Project="$(BUILD_STEPS)" Condition=" '$(Configuration)' == 'Release' "/>
-  
+  <Import Project="$(BUILD_STEPS)" Condition=" '$(Configuration)' == 'Release' " />
 </Project>

@@ -48,10 +48,23 @@ namespace BRM.InteractionAnalysis.UnityPlayback
             for (int i = 0; i < allEvents.Count; i++)
             {
                 var currentEvent = allEvents[i];
-                var timeToWait = GetTimeSinceStartSeconds(currentEvent.TimestampMillis);
+                var lastEventExists = i - 1 >= 0;
+                var lastEvent = lastEventExists ? allEvents[i - 1] : null;
+                var currentTimeSinceStartSeconds = GetTimeSinceStartSeconds(currentEvent.TimestampMillis);
+                var lastTimeSinceStartSeconds = lastEventExists ? GetTimeSinceStartSeconds(lastEvent.TimestampMillis) : 0;
+                var timeToWait = currentTimeSinceStartSeconds - lastTimeSinceStartSeconds;
                 if (!Mathf.Approximately(0, timeToWait))
                 {
                     yield return new WaitForSeconds(timeToWait);
+                }
+
+                if (currentEvent is ComponentEventModel comp)
+                {
+                    _debugger.Log($"replaying event: time:{currentTimeSinceStartSeconds:0.00}, type:{comp.EventType}, gameObject:{comp.GameObjectName}, comp:{comp.ComponentType}");
+                }
+                else
+                {
+                    _debugger.Log($"replaying event: time:{currentTimeSinceStartSeconds:0.00}, type:{currentEvent.EventType}");
                 }
 
                 ReplayEvent(currentEvent);

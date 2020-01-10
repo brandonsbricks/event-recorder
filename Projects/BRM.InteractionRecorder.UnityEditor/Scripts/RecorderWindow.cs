@@ -266,7 +266,7 @@ namespace BRM.InteractionRecorder.UnityEditor
                 _wasPlaying = false;
                 return;
             }
-
+            
             _onUpdate?.Invoke();
 
             if (Input.GetMouseButtonDown(MouseButton.Left) || Input.GetMouseButtonUp(MouseButton.Left))

@@ -33,11 +33,10 @@ namespace BRM.InteractionRecorder.TmpUi.Subscribers
         {
             UnityAction<string> onInputFieldEndEdit = newValue =>
             {
-                var newEvent = new TextInputEvent
+                var newEvent = new TextInputEvent(TmpEventNames.TmpTextInputEvent)
                 {
                     PropertyName = "text",
                     NewValue = newValue,
-                    EventType = TextInputEvent.TmpTextInputEvent
                 };
                 PopulateCommonEventData(newEvent, tmpInput.transform);
                 _events.Add(newEvent);

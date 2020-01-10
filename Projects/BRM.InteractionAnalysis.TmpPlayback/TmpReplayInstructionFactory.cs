@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BRM.InteractionAnalysis.UnityPlayback;
+using BRM.InteractionRecorder.TmpUi;
 using BRM.InteractionRecorder.UnityUi.Models;
 
 namespace BRM.InteractionAnalysis.TmpPlayback
@@ -12,8 +13,8 @@ namespace BRM.InteractionAnalysis.TmpPlayback
             var replayers = base.GetInstructions();
             var tmpDropdownReplayer = new TmpDropdownReplayer();
             var tmpTextInputReplayer = new TmpTextInputReplayer();
-            replayers.Add(DropdownEvent.TmpDropdownEvent, model => tmpDropdownReplayer.Replay(model as DropdownEvent));
-            replayers.Add(TextInputEvent.TmpTextInputEvent, model => tmpTextInputReplayer.Replay(model as TextInputEvent));
+            replayers.Add(TmpEventNames.TmpDropdownEvent, model => tmpDropdownReplayer.Replay(model as DropdownEvent));
+            replayers.Add(TmpEventNames.TmpTextInputEvent, model => tmpTextInputReplayer.Replay(model as TextInputEvent));
             return replayers;
         }
     }

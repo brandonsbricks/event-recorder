@@ -50,7 +50,7 @@ namespace BRM.InteractionRecorder.UnityEditor
         private bool _showSceneChanges = true;
         private bool _useSearch = false;
         private bool _showSubscribedEvents = true;
-        private bool _showNonSubscribedEvents = true;
+        private bool _showNonSubscribedEvents = false;
 
         private string _searchTerm;
         private bool _wasPlaying;
@@ -118,8 +118,9 @@ namespace BRM.InteractionRecorder.UnityEditor
         private void DisplaySubscriberToggles()
         {
             GUILayout.BeginHorizontal();
-            DisplayToggleButton($"{(_showSubscribedEvents ? "Hide" : "Show")} Subscribed Events", ref _showSubscribedEvents);
-            DisplayToggleButton($"{(_showNonSubscribedEvents ? "Hide" : "Show")} Non-Subscribed Events", ref _showNonSubscribedEvents);
+            GUILayout.Label("Show/Hide: ");
+            DisplayToggleButton("Subscribed Events", ref _showSubscribedEvents);
+            DisplayToggleButton("Non-Subscribed Events", ref _showNonSubscribedEvents);
             GUILayout.EndHorizontal();
         }
 
@@ -138,12 +139,13 @@ namespace BRM.InteractionRecorder.UnityEditor
         private void DisplayEventModelToggles(EventModelCollection collection)
         {
             GUILayout.BeginHorizontal();
-            DisplayToggleButton($"{(_showSceneChanges ? "Hide" : "Show")} Scene Changes", ref _showSceneChanges, collection.SceneChangedEvents.Count);
-            DisplayToggleButton($"{(_showToggles ? "Hide" : "Show")} Toggles", ref _showToggles, collection.ToggleEvents.Count);
-            DisplayToggleButton($"{(_showDropdowns ? "Hide" : "Show")} Dropdowns", ref _showDropdowns, collection.DropdownEvents.Count);
-            DisplayToggleButton($"{(_showTextInputs ? "Hide" : "Show")} Text Inputs", ref _showTextInputs, collection.TextInputEvents.Count);
-            DisplayToggleButton($"{(_showComponentTouches ? "Hide" : "Show")} Touches", ref _showComponentTouches, collection.ComponentTouchEvents.Count);
-            DisplayToggleButton($"{(_showSimpleTouches ? "Hide" : "Show")} Touches", ref _showSimpleTouches, collection.SimpleTouchEvents.Count);
+            GUILayout.Label("Show/Hide: ");
+            DisplayToggleButton("Simple Touches", ref _showSimpleTouches, collection.SimpleTouchEvents.Count);
+            DisplayToggleButton("Comp. Touches", ref _showComponentTouches, collection.ComponentTouchEvents.Count);
+            DisplayToggleButton("Text Inputs", ref _showTextInputs, collection.TextInputEvents.Count);
+            DisplayToggleButton("Dropdowns", ref _showDropdowns, collection.DropdownEvents.Count);
+            DisplayToggleButton("Toggles", ref _showToggles, collection.ToggleEvents.Count);
+            DisplayToggleButton("Scene Changes", ref _showSceneChanges, collection.SceneChangedEvents.Count);
             GUILayout.EndHorizontal();
         }
 
@@ -182,7 +184,7 @@ namespace BRM.InteractionRecorder.UnityEditor
             EditorGUILayout.Space();
         }
 
-        private void DisplayEvents(GUIStyle prefixStyle, GUIStyle wrapStyle, EventModelCollection collection)
+        private void DisplayEvents(GUIStyle prefixStyle, GUIStyle wrapStyle, EventModelCollection collection)//todo: flatten events to single array and display chronologically
         {
             _verticalScrollPosition = EditorGUILayout.BeginScrollView(_verticalScrollPosition);
             int totalIndex = 0;

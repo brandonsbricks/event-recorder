@@ -53,7 +53,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
             }
             UnityAction<BaseEventData> onClick = data =>
             {
-                var newEvent = new ComponentTouchEvent(TriggerTypeToString(type));
+                var newEvent = new ComponentTouchEvent(TriggerTypeToString(type)) {IsFromEventSubscription = true};
                 PopulateCommonEventData(newEvent, eventTrigger.transform);
                 _events.Add(newEvent);
             };

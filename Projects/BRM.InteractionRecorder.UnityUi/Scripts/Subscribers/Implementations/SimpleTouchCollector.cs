@@ -36,7 +36,6 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
             {
                 TouchPointProp = Input.mousePosition,
                 EventType = eventType,
-                IsFromEventSubscription = false,
             };
             _events.Add(newEvent);
         }

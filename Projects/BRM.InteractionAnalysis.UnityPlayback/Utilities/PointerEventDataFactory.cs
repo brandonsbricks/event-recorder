@@ -9,5 +9,10 @@ namespace BRM.InteractionAnalysis.UnityPlayback
         {
             return new PointerEventData(EventSystem.current){position = model.TouchPoint};
         }
+
+        public static BaseEventData Create()
+        {
+            return new BaseEventData(EventSystem.current);
+        }
     }
 }

@@ -138,7 +138,7 @@ namespace BRM.InteractionAnalysis.UnityPlayback
             {
                 if (EventTriggerSubscriber.TriggerTypeToString(trigger.eventID) == model.EventType)
                 {
-                    trigger.callback.Invoke(new BaseEventData(EventSystem.current));
+                    trigger.callback.Invoke(PointerEventDataFactory.Create());
                     return;
                 }
             }

@@ -31,7 +31,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         {
             UnityAction onClick = () =>
             {
-                var newEvent = new ComponentTouchEvent(ComponentTouchEvent.ButtonEvent);
+                var newEvent = new ComponentTouchEvent(ComponentTouchEvent.ButtonEvent){IsFromEventSubscription = true};
                 PopulateCommonEventData(newEvent, button.transform);
                 _events.Add(newEvent);
             };

@@ -43,6 +43,9 @@
     <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Plugins\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\Unity2019.2.14f1\Editor\Data\Managed\UnityEngine\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Plugins\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -51,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scripts\Constants.cs" />
     <Compile Include="Scripts\EventService.cs" />
+    <Compile Include="Scripts\SubscriberSupport\PointerEventInputModule.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\PointerHandlerCollector.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\SceneChangedSubscriber.cs" />
     <Compile Include="Scripts\UnityEventServiceFactory.cs" />

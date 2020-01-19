@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B13C275B-A939-48FB-833B-2A5024D9D0B7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BRM.EventAnalysis.TmpPlayback</RootNamespace>
+    <AssemblyName>BRM.EventAnalysis.TmpPlayback</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Unity.TextMeshPro, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Plugins\Unity.TextMeshPro.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>D:\Unity2019.2.9f1\Editor\Data\Managed\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Plugins\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Plugins\UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="TmpReplayInstructionFactory.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TmpReplayers.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BRM.EventAnalysis.UnityPlayback\BRM.EventAnalysis.UnityPlayback.csproj">
+      <Project>{e6c2cd80-3bdf-4d23-b1f5-37a17a82a456}</Project>
+      <Name>BRM.EventAnalysis.UnityPlayback</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BRM.EventRecorder.TmpUi\BRM.EventRecorder.TmpUi.csproj">
+      <Project>{e6c2cd80-3bdf-4d23-b1f5-37a17a82a456}</Project>
+      <Name>BRM.EventRecorder.TmpUi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BRM.EventRecorder.UnityUi\BRM.EventRecorder.UnityUi.csproj">
+      <Project>{e6c2cd80-3bdf-4d23-b1f5-37a17a82a456}</Project>
+      <Name>BRM.EventRecorder.UnityUi</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To properly import the build steps project...
+        1. Clone repo from https://github.com/brandonsbricks/build-steps
+        2. In Rider, navigate to File > Settings > Build, Execution, and Deployment > Toolset and Build > MSBuild Global Properties
+            a. Add variable "BUILD_STEPS" with the filePath for the .targets file (eg: "C:\Repos\BuildSteps\BRM.BuildSteps\BRM.BuildSteps.targets")
+        3. Review the comments in this BuildSteps.targets file for proper configuration
+  -->
+  <Import Project="$(BUILD_STEPS)" Condition=" '$(Configuration)' == 'Release' " />
+</Project>

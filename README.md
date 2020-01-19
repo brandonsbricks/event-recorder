@@ -1,4 +1,4 @@
-# Interaction Recorder
+# Event Recorder
 
 ## DEV NOTES
 To link required dll dependencies, find the following within your local UnityEditor + UnityProject Folders like so:
@@ -8,13 +8,13 @@ To link required dll dependencies, find the following within your local UnityEdi
 
 ## USE NOTES
 
-Records ui interactions users execute during a play session. Can be used to replay a series of ui interactions and gather game/app use data 
-Recorded interactions include 
-* Button Clicks
+Records ui events that users execute during a play session. Can be used to replay a series of ui events and gather game/app use data 
+Recorded events include 
+* IPointer...Enter, Exit, Down, Up, and Click, which includes Button clicks and EventTriggers
 * Dropdown option selection
+* Slider changes
 * Toggle changes
 * Text Input
-* Event triggers (down, up, click)
 
 * TextMeshPro Dropdown option selection
 * TextMeshPro Text Input
@@ -22,7 +22,7 @@ Recorded interactions include
 ## OUTPUT
 * A json file will be written to disk only if the custom Editor Window is open
 * For dropdown options or any other non-uniquely named item in the scene hierarchy, indexing is automatically added to the gameobject name for distinction. The name format will appear as `parent/gameobjectName;i=#` where the string separator is `;i=` and the index is `#`
-* To record ui interactions in a live build, you must interface with the EventService class
+* To record ui events in a live build, you must interface with the EventService class
 
 ## EXAMPLES
 * Examples to come

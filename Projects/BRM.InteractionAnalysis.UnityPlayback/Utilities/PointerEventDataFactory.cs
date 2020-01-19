@@ -5,7 +5,7 @@ namespace BRM.InteractionAnalysis.UnityPlayback
 {
     public static class PointerEventDataFactory
     {
-        public static PointerEventData Create(ComponentTouchEvent model)
+        public static PointerEventData Create(ComponentEvent model)
         {
             return new PointerEventData(EventSystem.current){position = model.TouchPoint};
         }

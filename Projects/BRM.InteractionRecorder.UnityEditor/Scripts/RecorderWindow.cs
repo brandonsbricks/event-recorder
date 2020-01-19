@@ -50,10 +50,11 @@ namespace BRM.InteractionRecorder.UnityEditor
         private bool _showSceneChanges = true;
         private bool _useSearch = false;
         private bool _showSubscribedEvents = true;
-        private bool _showNonSubscribedEvents = false;
+        private bool _showNonSubscribedEvents = true;
 
         private string _searchTerm;
         private bool _wasPlaying;
+        private int _lastEventCount;
 
         private event Action _onUpdate;
 
@@ -63,6 +64,7 @@ namespace BRM.InteractionRecorder.UnityEditor
         {
             _serializer = new UnityJsonSerializer();
             _fileWriter = new TextFileSerializer(_serializer, new UnityDebugger());
+            _lastEventCount = 0;
         }
 
         #region Gui Methods
@@ -98,10 +100,20 @@ namespace BRM.InteractionRecorder.UnityEditor
             DisplaySubscriberToggles();
 
             var eventCollection = _eventService.Payload.GetEventModels();
+            if (eventCollection.EventCount != _lastEventCount)
+            {
+                _eventService.UpdatePayload();
+                eventCollection = _eventService.Payload.GetEventModels();
+                _lastEventCount = eventCollection.EventCount;
+            }
+
             DisplayEventModelToggles(eventCollection);
 
             DisplayRefreshButton();
+            DisplayClearButton();
             DisplayEventsHeader(prefixStyle, headerLabel);
+
+
             DisplayEvents(prefixStyle, wrapStyle, eventCollection);
         }
 
@@ -167,12 +179,22 @@ namespace BRM.InteractionRecorder.UnityEditor
         {
             if (GUILayout.Button("Refresh"))
             {
-                _eventService.ResetSubscriptions();
-                _eventService.UpdatePayload();
+                ResetSubscriptions();
                 _fileWriter.Write(_jsonFilePath, _eventService.Payload);
                 AssetDatabase.Refresh();
             }
+
             EditorGUILayout.Space();
+        }
+
+        private void DisplayClearButton()
+        {
+            if (GUILayout.Button("Clear Recording"))
+            {
+                _eventService.ClearRecording();
+                ResetSubscriptions();
+                _fileWriter.Write(_jsonFilePath, _eventService.Payload);
+            }
         }
 
         private void DisplayEventsHeader(GUIStyle prefixStyle, GUIStyle headerLabel)
@@ -184,7 +206,7 @@ namespace BRM.InteractionRecorder.UnityEditor
             EditorGUILayout.Space();
         }
 
-        private void DisplayEvents(GUIStyle prefixStyle, GUIStyle wrapStyle, EventModelCollection collection)//todo: flatten events to single array and display chronologically
+        private void DisplayEvents(GUIStyle prefixStyle, GUIStyle wrapStyle, EventModelCollection collection) //todo: flatten events to single array and display chronologically
         {
             _verticalScrollPosition = EditorGUILayout.BeginScrollView(_verticalScrollPosition);
             int totalIndex = 0;
@@ -193,7 +215,7 @@ namespace BRM.InteractionRecorder.UnityEditor
             {
                 totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.SceneChangedEvents);
             }
-            
+
             if (_showToggles)
             {
                 totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.ToggleEvents);
@@ -213,7 +235,7 @@ namespace BRM.InteractionRecorder.UnityEditor
             {
                 totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.ComponentTouchEvents);
             }
-            
+
             if (_showSimpleTouches)
             {
                 totalIndex = DisplayCategory(totalIndex, prefixStyle, wrapStyle, collection.SimpleTouchEvents);
@@ -258,6 +280,11 @@ namespace BRM.InteractionRecorder.UnityEditor
 
         private void Update()
         {
+            if (!_wasPlaying && Application.isPlaying)
+            {
+                ResetSubscriptions();
+            }
+
             if (!Application.isPlaying && _wasPlaying)
             {
                 OnEditorStop();
@@ -268,7 +295,7 @@ namespace BRM.InteractionRecorder.UnityEditor
                 _wasPlaying = false;
                 return;
             }
-            
+
             _onUpdate?.Invoke();
 
             if (Input.GetMouseButtonDown(MouseButton.Left) || Input.GetMouseButtonUp(MouseButton.Left))
@@ -281,6 +308,14 @@ namespace BRM.InteractionRecorder.UnityEditor
 
         private void OnClick()
         {
+            ResetSubscriptions();
+            _fileWriter.Write(_jsonFilePath, _eventService.Payload);
+
+            Repaint();
+        }
+
+        private void ResetSubscriptions()
+        {
             var updators = _eventService.GetUpdaters();
             updators.ForEach(updator =>
             {
@@ -289,9 +324,6 @@ namespace BRM.InteractionRecorder.UnityEditor
             });
             _eventService.ResetSubscriptions();
             _eventService.UpdatePayload();
-            _fileWriter.Write(_jsonFilePath, _eventService.Payload);
-
-            Repaint();
         }
 
         private void OnEditorStop()

@@ -57,6 +57,7 @@
     <Compile Include="Scripts\SubscriberSupport\PointerEventInputModule.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\PointerHandlerCollector.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\SceneChangedSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\SliderSubscriber.cs" />
     <Compile Include="Scripts\UnityEventServiceFactory.cs" />
     <Compile Include="Scripts\UnityInteractionGatherer.cs" />
     <Compile Include="Scripts\Interfaces\Interfaces.cs" />
@@ -67,9 +68,7 @@
     <Compile Include="Scripts\Subscribers\Abstractions\SelectableSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\Abstractions\TouchSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\Abstractions\UiEventSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\ButtonSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\DropdownSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\EventTriggerSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\SimpleTouchCollector.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\TextInputSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\Implementations\ToggleSubscriber.cs" />

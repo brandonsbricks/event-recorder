@@ -35,6 +35,11 @@ namespace BRM.InteractionRecorder.UnityUi
             _allSubscribers.ResetSubscriptions();
         }
 
+        public void ClearRecording()
+        {
+            Payload.ClearRecording();
+        }
+
         public void UpdatePayload()
         {
             var newEvents = _allSubscribers.ExtractNewEvents();

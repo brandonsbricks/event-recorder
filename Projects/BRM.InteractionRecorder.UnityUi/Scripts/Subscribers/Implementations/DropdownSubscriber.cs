@@ -31,7 +31,7 @@ namespace BRM.InteractionRecorder.UnityUi.Subscribers
         {
             UnityAction<int> onDropdownChanged = newValue =>
             {
-                var newEvent = new DropdownEvent("UnityDropdownEvent")
+                var newEvent = new DropdownEvent(DropdownEvent.UnityDropdownEvent)
                 {
                     PropertyName = "value",
                     NewIntValue = newValue,

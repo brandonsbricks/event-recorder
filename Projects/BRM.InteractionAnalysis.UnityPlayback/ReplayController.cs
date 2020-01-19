@@ -11,8 +11,30 @@ namespace BRM.InteractionAnalysis.UnityPlayback
 {
     public class ReplayController : MonoBehaviour
     {
-        private Dictionary<string, Action<EventModelBase>> _replayInstructions;
+        #pragma warning disable 0649
+        [SerializeField] private List<ReplayInstruction> _replayInstructions;
+        #pragma warning restore 0649
+        
         private IDebug _debugger = new UnityDebugger();
+        
+        [Serializable]
+        private class ReplayInstruction
+        {
+            public string Name;
+            public bool EnableReplay = true;
+            private readonly Action<EventModelBase> _onReplay;
+            
+            public ReplayInstruction(string eventType, Action<EventModelBase> onReplay)
+            {
+                Name = eventType;
+                _onReplay = onReplay;
+            }
+
+            public void Replay(EventModelBase model)
+            {
+                _onReplay.Invoke(model);
+            }
+        }
 
         /// <summary>
         /// Set replay instructions from <see cref="ReplayInstructionFactory"/> or another customized source which maps
@@ -21,7 +43,10 @@ namespace BRM.InteractionAnalysis.UnityPlayback
         /// <param name="replayInstructions"></param>
         public void Initialize(Dictionary<string, Action<EventModelBase>> replayInstructions)
         {
-            _replayInstructions = replayInstructions;
+            foreach (var kvp in replayInstructions)
+            {
+                _replayInstructions.Add(new ReplayInstruction(kvp.Key, kvp.Value));
+            }
         }
 
         public void Replay(EventAndAppPayload payload)
@@ -58,25 +83,39 @@ namespace BRM.InteractionAnalysis.UnityPlayback
                     yield return new WaitForSeconds(timeToWait);
                 }
 
-                if (currentEvent is ComponentEventModel comp)
-                {
-                    _debugger.Log($"replaying event: time:{currentTimeSinceStartSeconds:0.00}, type:{comp.EventType}, gameObject:{comp.GameObjectName}, comp:{comp.ComponentType}");
-                }
-                else
-                {
-                    _debugger.Log($"replaying event: time:{currentTimeSinceStartSeconds:0.00}, type:{currentEvent.EventType}");
-                }
-
-                ReplayEvent(currentEvent);
+                ReplayEvent(currentEvent, currentTimeSinceStartSeconds);
             }
         }
 
-        private void ReplayEvent(EventModelBase modelBase)
+        private void ReplayEvent(EventModelBase modelBase, float currentTimeSinceStartSeconds)
         {
             var eventType = modelBase.EventType;
-            if (_replayInstructions.TryGetValue(eventType, out var instruction))
+            var instruction = _replayInstructions.Find(instr => instr.Name == eventType);
+            if (instruction != null)
             {
-                instruction?.Invoke(modelBase);
+                if (!instruction.EnableReplay)
+                {
+                    if (modelBase is ComponentEventModel comp)
+                    {
+                        _debugger.Log($"Replay disabled time:{currentTimeSinceStartSeconds:0.00}, type:{comp.EventType}, gameObject:{comp.GameObjectName}, comp:{comp.ComponentType}");
+                    }
+                    else
+                    {
+                        _debugger.Log($"Replay disabled time:{currentTimeSinceStartSeconds:0.00}, type:{modelBase.EventType}");
+                    }
+                    return;
+                }
+                
+                if (modelBase is ComponentEventModel compo)
+                {
+                    _debugger.Log($"Replaying Event: time:{currentTimeSinceStartSeconds:0.00}, type:{compo.EventType}, gameObject:{compo.GameObjectName}, comp:{compo.ComponentType}");
+                }
+                else
+                {
+                    _debugger.Log($"Replaying Event: time:{currentTimeSinceStartSeconds:0.00}, type:{modelBase.EventType}");
+                }
+
+                instruction.Replay(modelBase);
                 return;
             }
 

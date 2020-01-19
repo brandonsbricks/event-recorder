@@ -27,14 +27,14 @@ namespace BRM.InteractionAnalysis.UnityPlayback
             var gameObject = GameObjectFinder.Find(model.GameObjectName);
             if (gameObject == null)
             {
-                _debugger.LogWarning($"GameObject not found with name:{model.GameObjectName}. Is the gameobject disabled? This may be expected and insignificant with dropdown toggles. Skipping replay");
+                _debugger.LogWarning($"GameObject :{model.GameObjectName} not found for event {model.EventType}. Skipping replay");
                 return;
             }
 
             var component = gameObject.GetComponent(typeof(TComponent)) as TComponent;
             if (component == null || ReferenceEquals(null, component))
             {
-                _debugger.LogWarning($"Component of type:{model.ComponentType} not found on gameobject:{model.GameObjectName}. Skipping replay");
+                _debugger.LogWarning($"Component :{model.ComponentType} not found on gameobject :{model.GameObjectName} for event {model.EventType}. Skipping replay");
                 return;
             }
             
@@ -59,47 +59,39 @@ namespace BRM.InteractionAnalysis.UnityPlayback
             //todo: display touch ui
         }
     }
-    public class PointerClickReplayer : ComponentReplayer<ComponentTouchEvent, IPointerClickHandler>
+    public class PointerClickReplayer : ComponentReplayer<ComponentEvent, IPointerClickHandler>
     {
-        protected override void OnGetComponent(ComponentTouchEvent model, IPointerClickHandler component)
+        protected override void OnGetComponent(ComponentEvent model, IPointerClickHandler component)
         {
             component.OnPointerClick(PointerEventDataFactory.Create(model));
         }
     }
-    public class PointerDownReplayer : ComponentReplayer<ComponentTouchEvent, IPointerDownHandler>
+    public class PointerDownReplayer : ComponentReplayer<ComponentEvent, IPointerDownHandler>
     {
-        protected override void OnGetComponent(ComponentTouchEvent model, IPointerDownHandler component)
+        protected override void OnGetComponent(ComponentEvent model, IPointerDownHandler component)
         {
             component.OnPointerDown(PointerEventDataFactory.Create(model));
         }
     }
-    public class PointerUpReplayer : ComponentReplayer<ComponentTouchEvent, IPointerUpHandler>
+    public class PointerUpReplayer : ComponentReplayer<ComponentEvent, IPointerUpHandler>
     {
-        protected override void OnGetComponent(ComponentTouchEvent model, IPointerUpHandler component)
+        protected override void OnGetComponent(ComponentEvent model, IPointerUpHandler component)
         {
             component.OnPointerUp(PointerEventDataFactory.Create(model));
         }
     }
-    public class PointerEnterReplayer : ComponentReplayer<ComponentTouchEvent, IPointerEnterHandler>
+    public class PointerEnterReplayer : ComponentReplayer<ComponentEvent, IPointerEnterHandler>
     {
-        protected override void OnGetComponent(ComponentTouchEvent model, IPointerEnterHandler component)
+        protected override void OnGetComponent(ComponentEvent model, IPointerEnterHandler component)
         {
             component.OnPointerEnter(PointerEventDataFactory.Create(model));
         }
     }
-    public class PointerExitReplayer : ComponentReplayer<ComponentTouchEvent, IPointerExitHandler>
+    public class PointerExitReplayer : ComponentReplayer<ComponentEvent, IPointerExitHandler>
     {
-        protected override void OnGetComponent(ComponentTouchEvent model, IPointerExitHandler component)
+        protected override void OnGetComponent(ComponentEvent model, IPointerExitHandler component)
         {
             component.OnPointerExit(PointerEventDataFactory.Create(model));
-        }
-    }
-
-    public class ButtonReplayer : ComponentReplayer<ComponentTouchEvent, Button>
-    {
-        protected override void OnGetComponent(ComponentTouchEvent model, Button component)
-        {
-            component.onClick.Invoke();
         }
     }
 
@@ -108,6 +100,14 @@ namespace BRM.InteractionAnalysis.UnityPlayback
         protected override void OnGetComponent(ToggleEvent model, Toggle component)
         {
             component.isOn = model.NewValue;
+        }
+    }
+    
+    public class SliderReplayer : ComponentReplayer<SliderEvent, Slider>
+    {
+        protected override void OnGetComponent(SliderEvent model, Slider component)
+        {
+            component.value = model.NewValue;
         }
     }
 
@@ -125,25 +125,6 @@ namespace BRM.InteractionAnalysis.UnityPlayback
         {
             component.text = model.NewValue;
             component.onEndEdit.Invoke(model.NewValue);
-        }
-    }
-
-    public class EventTriggerReplayer : ComponentReplayer<ComponentTouchEvent, EventTrigger>
-    {
-        private IDebug _debugger = new UnityDebugger();
-
-        protected override void OnGetComponent(ComponentTouchEvent model, EventTrigger component)
-        {
-            foreach (var trigger in component.triggers)
-            {
-                if (EventTriggerSubscriber.TriggerTypeToString(trigger.eventID) == model.EventType)
-                {
-                    trigger.callback.Invoke(PointerEventDataFactory.Create());
-                    return;
-                }
-            }
-
-            _debugger.LogError($"No EventTriggerType found for eventtype:{model.EventType}");
         }
     }
 }

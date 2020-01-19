@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using BRM.InteractionRecorder.UnityUi.Models;
 
@@ -57,9 +58,10 @@ namespace BRM.InteractionRecorder.UnityUi
         #endregion
         
         #region Unity Lifecycle
-        protected virtual void Awake()
+        private void Start()
         {
             DontDestroyOnLoad(gameObject);
+            ResetSubscriptions();
         }
 
         private void Update()

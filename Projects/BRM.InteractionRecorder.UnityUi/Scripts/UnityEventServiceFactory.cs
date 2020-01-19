@@ -12,8 +12,7 @@ namespace BRM.InteractionRecorder.UnityUi
                 {
                     //generic Unity UI subscribers
                     new SceneChangedSubscriber(),
-                    new EventTriggerSubscriber(),
-                    new ButtonSubscriber(),
+                    new SliderSubscriber(),
                     new DropdownSubscriber(),
                     new TextInputSubscriber(),
                     new ToggleSubscriber()
@@ -23,7 +22,6 @@ namespace BRM.InteractionRecorder.UnityUi
                     //generic touch events
                     new SimpleTouchCollector(),
                     new PointerHandlerCollector()
-                    
                 });
             return service;
         }

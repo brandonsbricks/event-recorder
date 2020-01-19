@@ -10,16 +10,17 @@ namespace BRM.InteractionAnalysis.UnityPlayback
         {
             var sceneChangedReplayer = new SceneChangedReplayer();
             var simpleTouchReplayer = new SimpleTouchReplayer();
-            var buttonReplayer = new ButtonReplayer();
-            var toggleReplayer = new ToggleReplayer();
-            var dropdownReplayer = new DropdownReplayer();
-            var textInputReplayer = new TextInputReplayer();
-            var eventTriggerReplayer = new EventTriggerReplayer();
+            
             var pointerDownReplayer = new PointerDownReplayer();
             var pointerUpReplayer = new PointerUpReplayer();
             var pointerClickReplayer = new PointerClickReplayer();
             var pointerEnterReplayer = new PointerEnterReplayer();
             var pointerExitReplayer = new PointerExitReplayer();
+            
+            var toggleReplayer = new ToggleReplayer();
+            var sliderReplayer = new SliderReplayer();
+            var dropdownReplayer = new DropdownReplayer();
+            var textInputReplayer = new TextInputReplayer();
             
             var replayers = new Dictionary<string, Action<EventModelBase>>
             {
@@ -28,22 +29,15 @@ namespace BRM.InteractionAnalysis.UnityPlayback
                 {SimpleTouchEvent.TouchUp, modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
                 {SimpleTouchEvent.TouchDown, modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
                 {nameof(SimpleTouchEvent), modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
-
-                {ComponentTouchEvent.ButtonEvent, modelBase => buttonReplayer.Replay(modelBase as ComponentTouchEvent)},
                 
-                {ComponentTouchEvent.EventTriggerUpEvent, modelBase => eventTriggerReplayer.Replay(modelBase as ComponentTouchEvent)},
-                {ComponentTouchEvent.EventTriggerClickEvent, modelBase => eventTriggerReplayer.Replay(modelBase as ComponentTouchEvent)},
-                {ComponentTouchEvent.EventTriggerDownEvent, modelBase => eventTriggerReplayer.Replay(modelBase as ComponentTouchEvent)},
-                {ComponentTouchEvent.EventTriggerUnknownEvent, modelBase => eventTriggerReplayer.Replay(modelBase as ComponentTouchEvent)},
-                
-                {ComponentTouchEvent.IPointerClickEvent, modelBase => pointerClickReplayer.Replay(modelBase as ComponentTouchEvent)},
-                {ComponentTouchEvent.IPointerDownEvent, modelBase => pointerDownReplayer.Replay(modelBase as ComponentTouchEvent)},
-                {ComponentTouchEvent.IPointerUpEvent, modelBase => pointerUpReplayer.Replay(modelBase as ComponentTouchEvent)},
-                {ComponentTouchEvent.IPointerEnterEvent, modelBase => pointerEnterReplayer.Replay(modelBase as ComponentTouchEvent)},
-                {ComponentTouchEvent.IPointerExitEvent, modelBase => pointerExitReplayer.Replay(modelBase as ComponentTouchEvent)},
+                {ComponentEvent.IPointerDownEvent, modelBase => pointerDownReplayer.Replay(modelBase as ComponentEvent)},
+                {ComponentEvent.IPointerUpEvent, modelBase => pointerUpReplayer.Replay(modelBase as ComponentEvent)},
+                {ComponentEvent.IPointerClickEvent, modelBase => pointerClickReplayer.Replay(modelBase as ComponentEvent)},
+                {ComponentEvent.IPointerEnterEvent, modelBase => pointerEnterReplayer.Replay(modelBase as ComponentEvent)},
+                {ComponentEvent.IPointerExitEvent, modelBase => pointerExitReplayer.Replay(modelBase as ComponentEvent)},
 
                 {nameof(ToggleEvent), modelBase => toggleReplayer.Replay(modelBase as ToggleEvent)},
-                
+                {nameof(SliderEvent), modelBase => sliderReplayer.Replay(modelBase as SliderEvent)},
                 {DropdownEvent.UnityDropdownEvent, modelBase => dropdownReplayer.Replay(modelBase as DropdownEvent)},
                 {TextInputEvent.UnityTextInputEvent, modelBase => textInputReplayer.Replay(modelBase as TextInputEvent)},
             };

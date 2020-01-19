@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace BRM.InteractionRecorder.UnityUi
 {
     public class PointerEventInputModule : StandaloneInputModule
     {
-        public GameObject GetHoveredGameObject()
+        public List<GameObject> GetHoveredGameObjects()
         {
             var data = GetLastPointerEventData(kMouseLeftId);
-            return data.hovered.Count > 0 ? data.hovered[0] : null;
+            var numHovered = data?.hovered?.Count;
+            return numHovered > 0 ? data.hovered : null;
         }
     }
 }

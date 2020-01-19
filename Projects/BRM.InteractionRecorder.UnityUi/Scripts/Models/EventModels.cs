@@ -82,7 +82,7 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     }
 
     [Serializable]
-    public class ComponentTouchEvent : ComponentEventModel
+    public class ComponentEvent : ComponentEventModel
     {
         public Vector3 TouchPoint
         {
@@ -92,17 +92,10 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         
         [SerializeField] private Vector2Int TouchPointPixels;
 
-        public ComponentTouchEvent(string eventTypeName) : base(eventTypeName)
+        public ComponentEvent(string eventTypeName) : base(eventTypeName)
         {
         }
 
-        public const string EventTriggerDownEvent = nameof(EventTriggerDownEvent);
-        public const string EventTriggerUpEvent = nameof(EventTriggerUpEvent);
-        public const string EventTriggerClickEvent = nameof(EventTriggerClickEvent);
-        public const string EventTriggerUnknownEvent = nameof(EventTriggerUnknownEvent);
-
-        public const string ButtonEvent = nameof(ButtonEvent);
-        
         public const string IPointerUpEvent = nameof(IPointerUpEvent);
         public const string IPointerDownEvent = nameof(IPointerDownEvent);
         public const string IPointerClickEvent = nameof(IPointerClickEvent);
@@ -111,7 +104,19 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     }
     
     [Serializable]
-    public class DropdownEvent : ComponentTouchEvent
+    public class SliderEvent : ComponentEvent
+    {
+        public SliderEvent() : base(nameof(SliderEvent))
+        {
+            IsFromEventSubscription = true;
+        }
+
+        public string PropertyName;
+        public float NewValue;
+    }
+    
+    [Serializable]
+    public class DropdownEvent : ComponentEvent
     {
         public DropdownEvent(string eventTypeName) : base(eventTypeName)
         {
@@ -121,11 +126,12 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         public string PropertyName;
         public int NewIntValue;
         public string NewStringValue;
+        
         public const string UnityDropdownEvent = nameof(UnityDropdownEvent);
     }
 
     [Serializable]
-    public class ToggleEvent : ComponentTouchEvent
+    public class ToggleEvent : ComponentEvent
     {
         public ToggleEvent() : base(nameof(ToggleEvent))
         {
@@ -199,8 +205,9 @@ namespace BRM.InteractionRecorder.UnityUi.Models
     {
         public List<SceneChangedEvent> SceneChangedEvents = new List<SceneChangedEvent>();
         public List<SimpleTouchEvent> SimpleTouchEvents = new List<SimpleTouchEvent>();
-        public List<ComponentTouchEvent> ComponentTouchEvents = new List<ComponentTouchEvent>();
+        public List<ComponentEvent> ComponentTouchEvents = new List<ComponentEvent>();
         public List<TextInputEvent> TextInputEvents = new List<TextInputEvent>();
+        public List<SliderEvent> SliderEvents = new List<SliderEvent>();
         public List<DropdownEvent> DropdownEvents = new List<DropdownEvent>();
         public List<ToggleEvent> ToggleEvents = new List<ToggleEvent>();
 
@@ -211,12 +218,13 @@ namespace BRM.InteractionRecorder.UnityUi.Models
             allEvents.AddRange(SimpleTouchEvents);
             allEvents.AddRange(ComponentTouchEvents);
             allEvents.AddRange(TextInputEvents);
+            allEvents.AddRange(SliderEvents);
             allEvents.AddRange(DropdownEvents);
             allEvents.AddRange(ToggleEvents);
             return allEvents;
         }
 
-        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + ComponentTouchEvents.Count + TextInputEvents.Count + DropdownEvents.Count + ToggleEvents.Count;
+        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + ComponentTouchEvents.Count + TextInputEvents.Count + SliderEvents.Count + DropdownEvents.Count + ToggleEvents.Count;
         
         /// <summary>
         /// Removes any events already in the collection
@@ -227,6 +235,7 @@ namespace BRM.InteractionRecorder.UnityUi.Models
             AddUnique(SimpleTouchEvents, newCollection.SimpleTouchEvents);
             AddUnique(ComponentTouchEvents, newCollection.ComponentTouchEvents);
             AddUnique(TextInputEvents, newCollection.TextInputEvents);
+            AddUnique(SliderEvents, newCollection.SliderEvents);
             AddUnique(DropdownEvents, newCollection.DropdownEvents);
             AddUnique(ToggleEvents, newCollection.ToggleEvents);
         }
@@ -239,6 +248,7 @@ namespace BRM.InteractionRecorder.UnityUi.Models
             SimpleTouchEvents = SimpleTouchEvents.OrderBy(item => orderFunc).ToList();
             ComponentTouchEvents = ComponentTouchEvents.OrderBy(item => orderFunc).ToList();
             TextInputEvents = TextInputEvents.OrderBy(item => orderFunc).ToList();
+            SliderEvents = SliderEvents.OrderBy(item => orderFunc).ToList();
             DropdownEvents = DropdownEvents.OrderBy(item => orderFunc).ToList();
             ToggleEvents = ToggleEvents.OrderBy(item => orderFunc).ToList();
         }
@@ -285,6 +295,11 @@ namespace BRM.InteractionRecorder.UnityUi.Models
         {
             EventModels.SortByTimestamp();
             return EventModels;
+        }
+
+        public void ClearRecording()
+        {
+            EventModels = new EventModelCollection();
         }
     }
 }

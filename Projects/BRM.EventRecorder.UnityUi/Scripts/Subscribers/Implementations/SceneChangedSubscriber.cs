@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace BRM.EventRecorder.UnityUi.Subscribers
 {
-    public class SceneChangedSubscriber : UiEventSubscriber
+    public class SceneChangedSubscriber : EventSubscriber
     {
         public override string Name => nameof(DropdownSubscriber);
         

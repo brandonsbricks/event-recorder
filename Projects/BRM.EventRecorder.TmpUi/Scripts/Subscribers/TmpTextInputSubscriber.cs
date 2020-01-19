@@ -35,7 +35,7 @@ namespace BRM.EventRecorder.TmpUi.Subscribers
                 var newEvent = new TextInputEvent(TmpEventNames.TmpTextInputEvent)
                 {
                     PropertyName = "text",
-                    NewValue = newValue,
+                    NewValue = newValue,//todo: encrypt for sensitive data
                 };
                 PopulateCommonEventData(newEvent, tmpInput.transform);
                 _events.Add(newEvent);

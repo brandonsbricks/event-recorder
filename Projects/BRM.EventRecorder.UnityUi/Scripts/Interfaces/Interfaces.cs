@@ -12,7 +12,7 @@ namespace BRM.EventRecorder.UnityUi.Interfaces
     
     public interface ISubscriberCollection
     {
-        void AddUniqueSubscriber(UiEventSubscriber subscriber);
-        void AddUniqueCollector(UiEventCollector collector);
+        void AddUniqueSubscriber(EventSubscriber subscriber);
+        void AddUniqueCollector(EventCollector collector);
     }
 }

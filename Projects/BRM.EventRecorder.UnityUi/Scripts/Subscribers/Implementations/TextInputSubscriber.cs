@@ -33,7 +33,7 @@ namespace BRM.EventRecorder.UnityUi.Subscribers
                 var newEvent = new TextInputEvent(TextInputEvent.UnityTextInputEvent)
                 {
                     PropertyName = "text",
-                    NewValue = newValue,
+                    NewValue = newValue,//todo: encrypt for sensitive data
                 };
                 PopulateCommonEventData(newEvent, inputField.transform);
                 _events.Add(newEvent);

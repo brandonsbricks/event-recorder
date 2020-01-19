@@ -5,13 +5,13 @@ using BRM.EventRecorder.UnityUi.Models;
 
 namespace BRM.EventRecorder.UnityUi.Subscribers
 {
-    public class SubscriberCollection : UiEventSubscriber, ISubscriberCollection
+    public class SubscriberCollection : EventSubscriber, ISubscriberCollection
     {
         public override string Name => nameof(SubscriberCollection);
-        private readonly List<UiEventSubscriber> _subscribers = new List<UiEventSubscriber>();
-        private readonly List<UiEventCollector> _collectors = new List<UiEventCollector>();
+        private readonly List<EventSubscriber> _subscribers = new List<EventSubscriber>();
+        private readonly List<EventCollector> _collectors = new List<EventCollector>();
 
-        public SubscriberCollection(List<UiEventSubscriber> subscribers, List<UiEventCollector> collectors)
+        public SubscriberCollection(List<EventSubscriber> subscribers, List<EventCollector> collectors)
         {
             if (subscribers != null)
             {
@@ -32,7 +32,7 @@ namespace BRM.EventRecorder.UnityUi.Subscribers
             _collectors.RemoveAll(col => col == null); 
         }
 
-        public void AddUniqueSubscriber(UiEventSubscriber subscriber)
+        public void AddUniqueSubscriber(EventSubscriber subscriber)
         {
             var subscriberName = subscriber.Name;
             var existingSubscriber = _subscribers.Find(sub => sub.Name == subscriberName);
@@ -42,7 +42,7 @@ namespace BRM.EventRecorder.UnityUi.Subscribers
             }
             AddUniqueCollector(subscriber);
         }
-        public void AddUniqueCollector(UiEventCollector collector)
+        public void AddUniqueCollector(EventCollector collector)
         {
             var collectorName = collector.Name;
             var existingCollector = _collectors.Find(col => col.Name == collectorName);

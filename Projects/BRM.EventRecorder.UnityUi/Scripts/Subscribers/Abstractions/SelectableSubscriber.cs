@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace BRM.EventRecorder.UnityUi.Subscribers
 {
-    public abstract class SelectableSubscriber<TSelectable, TModel> : UiEventSubscriber where TSelectable : Object where TModel : ComponentEventModel
+    public abstract class SelectableSubscriber<TSelectable, TModel> : EventSubscriber where TSelectable : Object where TModel : ComponentEventModel
     {
         protected abstract void OnSubscribe(TSelectable selectable);
         protected abstract void OnUnsubscribe(TSelectable selectable);

@@ -8,7 +8,7 @@ namespace BRM.EventRecorder.UnityUi
         public virtual EventService Create()
         {
             var service = new EventService(
-                new List<UiEventSubscriber>
+                new List<EventSubscriber>
                 {
                     //generic Unity UI subscribers
                     new SceneChangedSubscriber(),
@@ -17,7 +17,7 @@ namespace BRM.EventRecorder.UnityUi
                     new TextInputSubscriber(),
                     new ToggleSubscriber()
                 },
-                new List<UiEventCollector>
+                new List<EventCollector>
                 {
                     //generic touch events
                     new SimpleTouchCollector(),

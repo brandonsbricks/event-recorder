@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using BRM.EventRecorder.UnityUi.Models;
 using UnityEngine;
 

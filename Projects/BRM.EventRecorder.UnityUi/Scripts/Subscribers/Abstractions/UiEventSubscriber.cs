@@ -2,7 +2,7 @@
 
 namespace BRM.EventRecorder.UnityUi
 {
-    public interface ISubscribeToUiEvents
+    public interface ISubscribeToEvents
     {
         void ResetSubscriptions();
         void UnsubscribeAll();
@@ -14,13 +14,13 @@ namespace BRM.EventRecorder.UnityUi
     }
     
     
-    public abstract class UiEventCollector : ICollectEvents
+    public abstract class EventCollector : ICollectEvents
     {
         public abstract EventModelCollection ExtractNewEvents();
         public abstract string Name { get; }
     }
 
-    public abstract class UiEventSubscriber : UiEventCollector, ISubscribeToUiEvents
+    public abstract class EventSubscriber : EventCollector, ISubscribeToEvents
     {
         public abstract void ResetSubscriptions();
         public abstract void UnsubscribeAll();

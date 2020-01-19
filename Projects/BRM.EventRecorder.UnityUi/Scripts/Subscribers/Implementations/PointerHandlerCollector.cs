@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace BRM.EventRecorder.UnityUi.Subscribers
 {
-    public class PointerHandlerCollector : UiEventCollector, IUpdate
+    public class PointerHandlerCollector : EventCollector, IUpdate
     {
         public override string Name => nameof(PointerHandlerCollector);
         private readonly List<ComponentEvent> _events = new List<ComponentEvent>();
@@ -14,7 +14,7 @@ namespace BRM.EventRecorder.UnityUi.Subscribers
         private GameObject _lastHoveredGoForExit;
         private GameObject _lastDownedGo;
 
-        public void OnUpdate()
+        public void OnUpdate()//todo: measure performance. Much GetComponent in here
         {
             List<GameObject> currentHoveredGos = null;
             if (EventSystem.current.currentInputModule is PointerEventInputModule inputModule)

@@ -12,16 +12,16 @@ namespace BRM.EventRecorder.UnityUi
         
         protected readonly SubscriberCollection _allSubscribers = null;
         
-        public EventService(List<UiEventSubscriber> subscribers, List<UiEventCollector> collectors)
+        public EventService(List<EventSubscriber> subscribers, List<EventCollector> collectors)
         {
             _allSubscribers = new SubscriberCollection(subscribers, collectors);
         }
 
-        public void AddUniqueSubscriber(UiEventSubscriber subscriber)
+        public void AddUniqueSubscriber(EventSubscriber subscriber)
         {
             _allSubscribers.AddUniqueSubscriber(subscriber);
         }
-        public void AddUniqueCollector(UiEventCollector collector)
+        public void AddUniqueCollector(EventCollector collector)
         {
             _allSubscribers.AddUniqueCollector(collector);
         }

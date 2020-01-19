@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BRM.EventRecorder.UnityUi.Subscribers
 {
-    public class SimpleTouchCollector : UiEventCollector, IUpdate
+    public class SimpleTouchCollector : EventCollector, IUpdate
     {
         public override string Name => nameof(SimpleTouchCollector);
         private readonly List<SimpleTouchEvent> _events = new List<SimpleTouchEvent>();

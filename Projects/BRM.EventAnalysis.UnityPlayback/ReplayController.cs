@@ -13,6 +13,7 @@ namespace BRM.EventAnalysis.UnityPlayback
     {
         #pragma warning disable 0649
         [SerializeField] private List<ReplayInstruction> _replayInstructions;
+        [SerializeField] private bool _enableLogging = true;
         #pragma warning restore 0649
         
         private IDebug _debugger = new UnityDebugger();
@@ -52,6 +53,11 @@ namespace BRM.EventAnalysis.UnityPlayback
         public void Replay(EventAndAppPayload payload)
         {
             StartCoroutine(ReplayEvents(payload.GetEventModels()));
+        }
+
+        private void Update()
+        {
+            _debugger.Enabled = _enableLogging;
         }
 
         private IEnumerator ReplayEvents(EventModelCollection events)

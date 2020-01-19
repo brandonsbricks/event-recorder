@@ -93,7 +93,7 @@ namespace BRM.EventRecorder.UnityEditor
             if (_toggleButtonStyleNormal == null)
             {
                 _toggleButtonStyleNormal = "Button";
-                _toggleButtonStyleNormal.padding.left = _toggleButtonStyleNormal.padding.right = 3;
+                _toggleButtonStyleNormal.padding.left = _toggleButtonStyleNormal.padding.right = 7;
                 _toggleButtonStyleToggled = new GUIStyle(_toggleButtonStyleNormal);
                 _toggleButtonStyleToggled.normal.background = _toggleButtonStyleToggled.active.background;
             }
@@ -144,34 +144,36 @@ namespace BRM.EventRecorder.UnityEditor
         private void DisplayEventModelToggles(EventModelCollection collection)
         {
             GUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Show/Hide: ");
-            DisplayToggleButton("Simple Touches", ref _showSimpleTouches, collection.SimpleTouchEvents.Count);
-            DisplayToggleButton("IPointers", ref _showIPointers, collection.IPointerEvents.Count);
+            EditorGUILayout.LabelField("Show/Hide: ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
+            DisplayEventTypeToggle("Simple Touches", ref _showSimpleTouches, collection.SimpleTouchEvents.Count);
+            DisplayEventTypeToggle("Text Inputs", ref _showTextInputs, collection.TextInputEvents.Count);
             GUILayout.EndHorizontal();
             
-            EditorGUILayout.LabelField("           ");
             GUILayout.BeginHorizontal();
-            DisplayToggleButton("Text Inputs", ref _showTextInputs, collection.TextInputEvents.Count);
-            DisplayToggleButton("Sliders", ref _showDropdowns, collection.DropdownEvents.Count);
-            DisplayToggleButton("Dropdowns", ref _showDropdowns, collection.DropdownEvents.Count);
+            EditorGUILayout.LabelField("           ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
+            DisplayEventTypeToggle("IPointers", ref _showIPointers, collection.IPointerEvents.Count);
+            DisplayEventTypeToggle("Sliders", ref _showDropdowns, collection.SliderEvents.Count);
+            DisplayEventTypeToggle("Toggles", ref _showToggles, collection.ToggleEvents.Count);
             GUILayout.EndHorizontal();
             
-            EditorGUILayout.LabelField("           ");
             GUILayout.BeginHorizontal();
-            DisplayToggleButton("Toggles", ref _showToggles, collection.ToggleEvents.Count);
-            DisplayToggleButton("Scene Changes", ref _showSceneChanges, collection.SceneChangedEvents.Count);
+            EditorGUILayout.LabelField("           ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
+            DisplayEventTypeToggle("Dropdowns", ref _showDropdowns, collection.DropdownEvents.Count);
+            DisplayEventTypeToggle("Scene Changes", ref _showSceneChanges, collection.SceneChangedEvents.Count);
             GUILayout.EndHorizontal();
+            
+            EditorGUILayout.Space();
         }
 
-        private void DisplayToggleButton(string label, ref bool showItems, int numItems)
+        private void DisplayEventTypeToggle(string label, ref bool showItems, int numItems)
         {
             string newLabel = $"{label} ({numItems})";
-            DisplayToggleButton(newLabel, ref showItems);
+            DisplayEventTypeToggle(newLabel, ref showItems);
         }
 
-        private void DisplayToggleButton(string label, ref bool showItems)
+        private void DisplayEventTypeToggle(string label, ref bool showItems)
         {
-            if (GUILayout.Button(label, showItems ? _toggleButtonStyleToggled : _toggleButtonStyleNormal))
+            if (GUILayout.Button(label, showItems ? _toggleButtonStyleToggled : _toggleButtonStyleNormal, GUILayout.ExpandWidth(false)))
             {
                 showItems = !showItems;
             }
@@ -179,7 +181,7 @@ namespace BRM.EventRecorder.UnityEditor
 
         private void DisplayRefreshButton()
         {
-            if (GUILayout.Button("Refresh"))
+            if (GUILayout.Button("Refresh", GUILayout.ExpandWidth(true)))
             {
                 ResetSubscriptions();
                 _fileWriter.Write(_outputFilePath, _eventService.Payload);
@@ -191,7 +193,7 @@ namespace BRM.EventRecorder.UnityEditor
 
         private void DisplayClearButton()
         {
-            if (GUILayout.Button("Clear"))
+            if (GUILayout.Button("Clear", GUILayout.ExpandWidth(true)))
             {
                 _eventService.ClearRecording();
                 ResetSubscriptions();
@@ -203,7 +205,7 @@ namespace BRM.EventRecorder.UnityEditor
         {
             EditorGUILayout.BeginHorizontal();
             GUILayout.Label("#", prefixStyle, GUILayout.MaxWidth(prefixStyle.fixedWidth));
-            GUILayout.Label("Events", headerLabel);
+            GUILayout.Label("Event", headerLabel);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
         }

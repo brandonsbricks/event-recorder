@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventAnalysis.UnityPlay
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventAnalysis.TmpPlayback", "Projects\BRM.EventAnalysis.TmpPlayback\BRM.EventAnalysis.TmpPlayback.csproj", "{B13C275B-A939-48FB-833B-2A5024D9D0B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.CustomEvents", "BRM.EventRecorder.CustomEvents\BRM.EventRecorder.CustomEvents.csproj", "{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -46,17 +46,17 @@
     <Compile Include="Scripts\TmpRecorderWindow.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BRM.EventRecorder.TmpUi\BRM.EventRecorder.TmpUi.csproj">
+    <ProjectReference Include="..\BRM.EventRecorder.TmpEvents\BRM.EventRecorder.TmpEvents.csproj">
       <Project>{e6c2cd80-3bdf-4d23-b1f5-37a17a82a456}</Project>
-      <Name>BRM.EventRecorder.TmpUi</Name>
+      <Name>BRM.EventRecorder.TmpEvents</Name>
     </ProjectReference>
     <ProjectReference Include="..\BRM.EventRecorder.UnityEditor\BRM.EventRecorder.UnityEditor.csproj">
       <Project>{e6c2cd80-3bdf-4d23-b1f5-37a17a82a456}</Project>
       <Name>BRM.EventRecorder.UnityEditor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BRM.EventRecorder.UnityUi\BRM.EventRecorder.UnityUi.csproj">
+    <ProjectReference Include="..\BRM.EventRecorder.UnityEvents\BRM.EventRecorder.UnityEvents.csproj">
       <Project>{e6c2cd80-3bdf-4d23-b1f5-37a17a82a456}</Project>
-      <Name>BRM.EventRecorder.UnityUi</Name>
+      <Name>BRM.EventRecorder.UnityEvents</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

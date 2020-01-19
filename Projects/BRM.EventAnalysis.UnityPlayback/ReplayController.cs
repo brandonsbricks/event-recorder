@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BRM.DebugAdapter;
 using BRM.DebugAdapter.Interfaces;
-using BRM.EventRecorder.UnityUi.Models;
+using BRM.EventRecorder.UnityEvents.Models;
 using UnityEngine;
 
 namespace BRM.EventAnalysis.UnityPlayback

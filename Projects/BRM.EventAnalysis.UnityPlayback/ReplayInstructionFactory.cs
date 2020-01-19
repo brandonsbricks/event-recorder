@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using BRM.EventRecorder.UnityUi.Models;
+using BRM.EventRecorder.UnityEvents.Models;
 
 namespace BRM.EventAnalysis.UnityPlayback
 {
+    //todo: acceptable ocp violation. modify when recorder is added
     public class ReplayInstructionFactory
     {
         public virtual Dictionary<string, Action<EventModelBase>> GetInstructions()
@@ -21,6 +22,8 @@ namespace BRM.EventAnalysis.UnityPlayback
             var sliderReplayer = new SliderReplayer();
             var dropdownReplayer = new DropdownReplayer();
             var textInputReplayer = new TextInputReplayer();
+
+            var transformReplayer = new TransformReplayer();
             
             var replayers = new Dictionary<string, Action<EventModelBase>>
             {
@@ -30,16 +33,18 @@ namespace BRM.EventAnalysis.UnityPlayback
                 {SimpleTouchEvent.TouchDown, modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
                 {nameof(SimpleTouchEvent), modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
                 
-                {ComponentEvent.IPointerDownEvent, modelBase => pointerDownReplayer.Replay(modelBase as ComponentEvent)},
-                {ComponentEvent.IPointerUpEvent, modelBase => pointerUpReplayer.Replay(modelBase as ComponentEvent)},
-                {ComponentEvent.IPointerClickEvent, modelBase => pointerClickReplayer.Replay(modelBase as ComponentEvent)},
-                {ComponentEvent.IPointerEnterEvent, modelBase => pointerEnterReplayer.Replay(modelBase as ComponentEvent)},
-                {ComponentEvent.IPointerExitEvent, modelBase => pointerExitReplayer.Replay(modelBase as ComponentEvent)},
+                {PointerEvent.IPointerDownEvent, modelBase => pointerDownReplayer.Replay(modelBase as PointerEvent)},
+                {PointerEvent.IPointerUpEvent, modelBase => pointerUpReplayer.Replay(modelBase as PointerEvent)},
+                {PointerEvent.IPointerClickEvent, modelBase => pointerClickReplayer.Replay(modelBase as PointerEvent)},
+                {PointerEvent.IPointerEnterEvent, modelBase => pointerEnterReplayer.Replay(modelBase as PointerEvent)},
+                {PointerEvent.IPointerExitEvent, modelBase => pointerExitReplayer.Replay(modelBase as PointerEvent)},
 
                 {nameof(ToggleEvent), modelBase => toggleReplayer.Replay(modelBase as ToggleEvent)},
                 {nameof(SliderEvent), modelBase => sliderReplayer.Replay(modelBase as SliderEvent)},
                 {DropdownEvent.UnityDropdownEvent, modelBase => dropdownReplayer.Replay(modelBase as DropdownEvent)},
                 {TextInputEvent.UnityTextInputEvent, modelBase => textInputReplayer.Replay(modelBase as TextInputEvent)},
+                
+                {nameof(TransformEvent), modelBase => transformReplayer.Replay(modelBase as TransformEvent)},
             };
             return replayers;
         }

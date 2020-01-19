@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{03166CF7-9867-45AC-B29D-AE2D619394BD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BRM.EventRecorder.UnityEvents</RootNamespace>
+    <AssemblyName>BRM.EventRecorder.UnityEvents</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Plugins\UnityEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Plugins\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Plugins\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\Unity2019.2.14f1\Editor\Data\Managed\UnityEngine\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Plugins\UnityEngine.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\Constants.cs" />
+    <Compile Include="Scripts\EventService.cs" />
+    <Compile Include="Scripts\Models\EventModels\DropdownEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\EventModelAbstractions.cs" />
+    <Compile Include="Scripts\Models\EventModels\PointerEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\SceneChangedEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\SimpleTouchEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\SliderEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\TextInputEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\ToggleEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\TransformEvent.cs" />
+    <Compile Include="Scripts\Models\RecordingPayload.cs" />
+    <Compile Include="Scripts\SubscriberSupport\PointerEventInputModule.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\PointerHandlerRecorder.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\SceneChangedSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\SliderSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\TransformRecorder.cs" />
+    <Compile Include="Scripts\UnityEventServiceFactory.cs" />
+    <Compile Include="Scripts\UnityEventGatherer.cs" />
+    <Compile Include="Scripts\Interfaces\Interfaces.cs" />
+    <Compile Include="Scripts\Models\ConfigData.cs" />
+    <Compile Include="Scripts\Models\MouseButton.cs" />
+    <Compile Include="Scripts\SubscriberSupport\UnityNamingUtils.cs" />
+    <Compile Include="Scripts\Subscribers\Abstractions\SelectableSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Abstractions\TouchSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Abstractions\EventSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\DropdownSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\SimpleTouchRecorder.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\TextInputSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\Implementations\ToggleSubscriber.cs" />
+    <Compile Include="Scripts\Subscribers\EventRecorderCollection.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To properly import the build steps project...
+        1. Clone repo from https://github.com/brandonsbricks/build-steps
+        2. In Rider, navigate to File > Settings > Build, Execution, and Deployment > Toolset and Build > MSBuild Global Properties
+            a. Add variable "BUILD_STEPS" with the filePath for the .targets file (eg: "C:\Repos\BuildSteps\BRM.BuildSteps\BRM.BuildSteps.targets")
+        3. Review the comments in this BuildSteps.targets file for proper configuration
+  -->
+  <Import Project="$(BUILD_STEPS)" Condition=" '$(Configuration)' == 'Release' " />
+</Project>

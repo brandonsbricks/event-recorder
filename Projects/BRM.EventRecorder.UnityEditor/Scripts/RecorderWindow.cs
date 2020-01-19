@@ -5,14 +5,15 @@ using BRM.DataSerializers.Interfaces;
 using UnityEditor;
 using UnityEngine;
 using BRM.DebugAdapter;
-using BRM.EventRecorder.UnityUi;
-using BRM.EventRecorder.UnityUi.Models;
+using BRM.EventRecorder.UnityEvents;
+using BRM.EventRecorder.UnityEvents.Models;
 using BRM.FileSerializers;
 using BRM.FileSerializers.Interfaces;
 using BRM.TextSerializers;
 
 namespace BRM.EventRecorder.UnityEditor
 {
+    //todo: acceptable ocp violation. modify when event data type is added
     public abstract class RecorderWindow : EditorWindow
     {
         #region Variables
@@ -50,12 +51,11 @@ namespace BRM.EventRecorder.UnityEditor
         private bool _showDropdowns = true;
         private bool _showTextInputs = true;
         private bool _showIPointers = true;
+        private bool _showTransforms = true;
         private bool _showSimpleTouches = true;
         private bool _showSceneChanges = true;
         private bool _useSearch = false;
-        private bool _showSubscribedEvents = true;
-        private bool _showNonSubscribedEvents = true;
-
+        
         private string _searchTerm;
         private bool _wasPlaying;
         private int _lastEventCount;
@@ -162,6 +162,11 @@ namespace BRM.EventRecorder.UnityEditor
             DisplayEventTypeToggle("Scene Changes", ref _showSceneChanges, collection.SceneChangedEvents.Count);
             GUILayout.EndHorizontal();
             
+            GUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("           ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
+            DisplayEventTypeToggle("Transforms", ref _showDropdowns, collection.DropdownEvents.Count);
+            GUILayout.EndHorizontal();
+            
             EditorGUILayout.Space();
         }
 
@@ -233,6 +238,10 @@ namespace BRM.EventRecorder.UnityEditor
             {
                 AddEventDisplayText(collection.TextInputEvents, ref eventDisplayAndTimes);
             }
+            if (_showTransforms)
+            {
+                AddEventDisplayText(collection.TransformEvents, ref eventDisplayAndTimes);
+            }
             if (_showIPointers)
             {
                 AddEventDisplayText(collection.IPointerEvents, ref eventDisplayAndTimes);
@@ -262,9 +271,7 @@ namespace BRM.EventRecorder.UnityEditor
         {
             var modelDisplayText = _serializer.AsString(model, true);
             var isValidSearchItem = !_useSearch || modelDisplayText.ToLowerInvariant().Contains(_searchTerm.ToLowerInvariant());
-            var isValidSubscribedEvent = _showSubscribedEvents || !model.IsFromEventSubscription;
-            var isValidNonSubscribedEvent = _showNonSubscribedEvents || model.IsFromEventSubscription;
-            return isValidSearchItem && isValidSubscribedEvent && isValidNonSubscribedEvent;
+            return isValidSearchItem;
         }
         
         private void DisplayEvents(List<Tuple<string, long>> eventDisplayAndTimes, GUIStyle prefixStyle, GUIStyle wrapStyle)

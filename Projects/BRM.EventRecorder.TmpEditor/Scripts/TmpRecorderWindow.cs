@@ -1,6 +1,6 @@
-﻿using BRM.EventRecorder.TmpUi;
+﻿using BRM.EventRecorder.TmpEvents;
 using BRM.EventRecorder.UnityEditor;
-using BRM.EventRecorder.UnityUi;
+using BRM.EventRecorder.UnityEvents;
 using UnityEditor;
 using UnityEngine;
 

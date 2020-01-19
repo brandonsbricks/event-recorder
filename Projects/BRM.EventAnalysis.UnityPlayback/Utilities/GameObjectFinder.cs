@@ -1,5 +1,5 @@
 ﻿using System;
-using BRM.EventRecorder.UnityUi;
+using BRM.EventRecorder.UnityEvents;
 using UnityEngine;
 
 namespace BRM.EventAnalysis.UnityPlayback

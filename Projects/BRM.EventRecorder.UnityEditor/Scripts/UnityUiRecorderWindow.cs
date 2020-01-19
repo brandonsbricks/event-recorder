@@ -1,4 +1,4 @@
-﻿using BRM.EventRecorder.UnityUi;
+﻿using BRM.EventRecorder.UnityEvents;
 using UnityEditor;
 using UnityEngine;
 

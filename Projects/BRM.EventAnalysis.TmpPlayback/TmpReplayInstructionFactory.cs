@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using BRM.EventAnalysis.UnityPlayback;
-using BRM.EventRecorder.TmpUi;
-using BRM.EventRecorder.UnityUi.Models;
+using BRM.EventRecorder.TmpEvents;
+using BRM.EventRecorder.UnityEvents.Models;
 
 namespace BRM.EventAnalysis.TmpPlayback
 {

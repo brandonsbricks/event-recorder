@@ -1,18 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.UnityUi", "Projects\BRM.EventRecorder.UnityUi\BRM.EventRecorder.UnityUi.csproj", "{03166CF7-9867-45AC-B29D-AE2D619394BD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.UnityEvents", "Projects\BRM.EventRecorder.UnityEvents\BRM.EventRecorder.UnityEvents.csproj", "{03166CF7-9867-45AC-B29D-AE2D619394BD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.UnityEditor", "Projects\BRM.EventRecorder.UnityEditor\BRM.EventRecorder.UnityEditor.csproj", "{126843B2-8EFA-4BA9-8B7C-B23F9EA0138B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.TmpUi", "Projects\BRM.EventRecorder.TmpUi\BRM.EventRecorder.TmpUi.csproj", "{563BFB06-66FA-4048-A8AB-6C5F6C703BB3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.TmpEvents", "Projects\BRM.EventRecorder.TmpEvents\BRM.EventRecorder.TmpEvents.csproj", "{563BFB06-66FA-4048-A8AB-6C5F6C703BB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.TmpEditor", "Projects\BRM.EventRecorder.TmpEditor\BRM.EventRecorder.TmpEditor.csproj", "{8628782E-72EC-4346-B5CD-BA2220F91B96}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventAnalysis.UnityPlayback", "Projects\BRM.EventAnalysis.UnityPlayback\BRM.EventAnalysis.UnityPlayback.csproj", "{FE4EC2C1-69F5-43FF-AC4E-5520E771FB54}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventAnalysis.TmpPlayback", "Projects\BRM.EventAnalysis.TmpPlayback\BRM.EventAnalysis.TmpPlayback.csproj", "{B13C275B-A939-48FB-833B-2A5024D9D0B7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRM.EventRecorder.CustomEvents", "BRM.EventRecorder.CustomEvents\BRM.EventRecorder.CustomEvents.csproj", "{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,9 +42,5 @@ Global
 		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B13C275B-A939-48FB-833B-2A5024D9D0B7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A7DC2AB4-F3D6-4A13-B7AB-2CB441860469}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

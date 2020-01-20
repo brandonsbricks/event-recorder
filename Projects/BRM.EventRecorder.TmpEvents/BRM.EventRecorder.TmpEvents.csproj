@@ -36,7 +36,7 @@
     <Compile Include="Scripts\Subscribers\TmpDropdownSubscriber.cs" />
     <Compile Include="Scripts\Subscribers\TmpTextInputSubscriber.cs" />
     <Compile Include="Scripts\TmpEventNames.cs" />
-    <Compile Include="Scripts\TmpEventServiceFactory.cs" />
+    <Compile Include="Scripts\TmpRecordingServiceFactory.cs" />
     <Compile Include="Scripts\TmpEventGatherer.cs" />
   </ItemGroup>
   <ItemGroup>

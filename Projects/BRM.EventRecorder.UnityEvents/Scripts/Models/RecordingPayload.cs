@@ -95,7 +95,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
     {
         public List<SceneChangedEvent> SceneChangedEvents = new List<SceneChangedEvent>();
         public List<PositionEvent> SimpleTouchEvents = new List<PositionEvent>();
-        public List<StringEvent> CustomEvents = new List<StringEvent>();
+        public List<StringEvent> StringEvents = new List<StringEvent>();
         public List<PointerEvent> PointerEvents = new List<PointerEvent>();
         public List<TextInputEvent> TextInputEvents = new List<TextInputEvent>();
         public List<SliderEvent> SliderEvents = new List<SliderEvent>();
@@ -108,7 +108,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
             var allEvents = new List<EventModelBase>();
             allEvents.AddRange(SceneChangedEvents);
             allEvents.AddRange(SimpleTouchEvents);
-            allEvents.AddRange(CustomEvents);
+            allEvents.AddRange(StringEvents);
             allEvents.AddRange(PointerEvents);
             allEvents.AddRange(TextInputEvents);
             allEvents.AddRange(SliderEvents);
@@ -118,7 +118,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
             return allEvents;
         }
 
-        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + CustomEvents.Count + PointerEvents.Count + 
+        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + StringEvents.Count + PointerEvents.Count + 
                                  TextInputEvents.Count + SliderEvents.Count + DropdownEvents.Count + 
                                  ToggleEvents.Count + TransformEvents.Count;
         
@@ -129,7 +129,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
         {
             AddUnique(SceneChangedEvents, newCollection.SceneChangedEvents);
             AddUnique(SimpleTouchEvents, newCollection.SimpleTouchEvents);
-            AddUnique(CustomEvents, newCollection.CustomEvents);
+            AddUnique(StringEvents, newCollection.StringEvents);
             AddUnique(PointerEvents, newCollection.PointerEvents);
             AddUnique(TextInputEvents, newCollection.TextInputEvents);
             AddUnique(SliderEvents, newCollection.SliderEvents);
@@ -144,7 +144,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
             
             SceneChangedEvents = SceneChangedEvents.OrderBy(item => orderFunc).ToList();
             SimpleTouchEvents = SimpleTouchEvents.OrderBy(item => orderFunc).ToList();
-            CustomEvents = CustomEvents.OrderBy(item => orderFunc).ToList();
+            StringEvents = StringEvents.OrderBy(item => orderFunc).ToList();
             PointerEvents = PointerEvents.OrderBy(item => orderFunc).ToList();
             TextInputEvents = TextInputEvents.OrderBy(item => orderFunc).ToList();
             SliderEvents = SliderEvents.OrderBy(item => orderFunc).ToList();

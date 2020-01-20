@@ -3,7 +3,7 @@ using BRM.EventRecorder.UnityEvents.Models;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace BRM.EventRecorder.UnityEvents.Subscribers
+namespace BRM.EventRecorder.UnityEvents.Recorders
 {
     public class TextInputSubscriber : SelectableSubscriber<InputField, TextInputEvent>
     {

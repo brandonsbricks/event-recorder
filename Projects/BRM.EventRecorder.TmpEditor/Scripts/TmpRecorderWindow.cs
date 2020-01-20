@@ -16,6 +16,6 @@ namespace BRM.EventRecorder.TmpEditor
             window.Show();
         }
 
-        protected override EventService _eventService => _eventServiceLocal ?? (_eventServiceLocal = new TmpEventServiceFactory().Create());
+        protected override RecordingService _recordingService => _recordingServiceLocal ?? (_recordingServiceLocal = new TmpRecordingServiceFactory().Create());
     }
 }

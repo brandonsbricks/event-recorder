@@ -8,38 +8,39 @@ namespace BRM.EventRecorder.UnityEvents
     {
         [SerializeField] private bool _recording;
         
-        protected virtual EventService _eventService => _eventServiceLocal ?? (_eventServiceLocal = new UnityEventServiceFactory().Create());
-        protected EventService _eventServiceLocal;
+        protected virtual RecordingService _recordingService => _recordingServiceLocal ?? (_recordingServiceLocal = new UnityRecordingServiceFactory().Create());
+        protected RecordingService _recordingServiceLocal;
         
         private event Action _onUpdate;
+        private event Action _onGui;
 
         #region Public
         /// <summary>
         /// Use this to define which events get recorded
         /// Set this during the Awake/Start function of a Monobehavior
-        /// The <typeparamref name="UnityEventServiceFactory"/> will generate a default set of event recorders if
+        /// The <typeparamref name="UnityRecordingServiceFactory"/> will generate a default set of event recorders if
         /// this is not used
         /// </summary>
-        public void SetEventRecorderService(EventService service)
+        public void SetEventRecordingService(RecordingService service)
         {
-            _eventServiceLocal = service;
+            _recordingServiceLocal = service;
         }
         
         public void SetAppData(string gitSha, string server)
         {
-            _eventService.SetAppValues(gitSha, server);
+            _recordingService.SetAppValues(gitSha, server);
         }
 
         public EventAndAppPayload GetPayload()
         {
-            _eventService.UpdatePayload();
-            return _eventService.Payload;
+            _recordingService.UpdatePayload();
+            return _recordingService.Payload;
         }
 
         public void ToggleRecording(bool record)
         {
             _recording = record;
-            var updaters = _eventService.GetUpdaters();
+            var updaters = _recordingService.GetUpdaters();
             updaters.ForEach(updater =>
             {
                 if (!record)
@@ -52,8 +53,21 @@ namespace BRM.EventRecorder.UnityEvents
                     _onUpdate += updater.OnUpdate;
                 }
             });
+            var guiers = _recordingService.GetGuiers();
+            guiers.ForEach(guier =>
+            {
+                if (!record)
+                {
+                    _onGui -= guier.OnGui;
+                }
+                else
+                {
+                    _onGui -= guier.OnGui;
+                    _onGui += guier.OnGui;
+                }
+            });
             
-            _eventService.ToggleRecording(record);
+            _recordingService.ToggleRecording(record);
         }
         #endregion
         
@@ -77,19 +91,35 @@ namespace BRM.EventRecorder.UnityEvents
                 ResetSubscriptions();
             }
         }
+
+        private void OnGUI()
+        {
+            if (!_recording)
+            {
+                return;
+            }
+            _onGui?.Invoke();
+        }
+
         #endregion
         
         #region Private
 
         private void ResetSubscriptions()
         {
-            var updaters = _eventService.GetUpdaters();
+            var updaters = _recordingService.GetUpdaters();
             updaters.ForEach(updater =>
             {
                 _onUpdate -= updater.OnUpdate;
                 _onUpdate += updater.OnUpdate;
             });
-            _eventService.ResetSubscriptions();
+            var guiers = _recordingService.GetGuiers();
+            guiers.ForEach(guier =>
+            {
+                _onGui -= guier.OnGui;
+                _onGui += guier.OnGui;
+            });
+            _recordingService.ResetSubscriptions();
         }
         #endregion
     }

@@ -40,6 +40,9 @@
     <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Plugins\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\..\Unity2019.2.14f1\Editor\Data\Managed\UnityEngine\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.InputLegacyModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\Plugins\UnityEngine.InputLegacyModule.dll</HintPath>
     </Reference>
@@ -65,25 +68,26 @@
     <Compile Include="Scripts\Models\EventModels\ToggleEvent.cs" />
     <Compile Include="Scripts\Models\EventModels\TransformEvent.cs" />
     <Compile Include="Scripts\Models\RecordingPayload.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Recorders\CustomEventRecorder.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Recorders\KeypressRecorder.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Recorders\PointerHandlerRecorder.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Recorders\SimpleTouchRecorder.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Recorders\TransformRecorder.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Subscribers\DropdownSubscriber.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Subscribers\SceneChangedSubscriber.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Subscribers\SliderSubscriber.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Subscribers\TextInputSubscriber.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Subscribers\ToggleSubscriber.cs" />
     <Compile Include="Scripts\SubscriberSupport\PointerEventInputModule.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\CustomEventRecorder.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\PointerHandlerRecorder.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\SceneChangedSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\SliderSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\TransformRecorder.cs" />
-    <Compile Include="Scripts\UnityEventServiceFactory.cs" />
+    <Compile Include="Scripts\UnityRecordingServiceFactory.cs" />
     <Compile Include="Scripts\UnityEventGatherer.cs" />
     <Compile Include="Scripts\Interfaces\Interfaces.cs" />
     <Compile Include="Scripts\Models\MouseButton.cs" />
     <Compile Include="Scripts\SubscriberSupport\UnityNamingUtils.cs" />
-    <Compile Include="Scripts\Subscribers\Abstractions\SelectableSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Abstractions\TouchSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Abstractions\EventSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\DropdownSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\SimpleTouchRecorder.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\TextInputSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\Implementations\ToggleSubscriber.cs" />
-    <Compile Include="Scripts\Subscribers\EventRecorderCollection.cs" />
+    <Compile Include="Scripts\Recorders\Abstractions\SelectableSubscriber.cs" />
+    <Compile Include="Scripts\Recorders\Abstractions\TouchSubscriber.cs" />
+    <Compile Include="Scripts\Recorders\Abstractions\EventSubscriber.cs" />
+    <Compile Include="Scripts\Recorders\EventRecorderCollection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To properly import the build steps project...

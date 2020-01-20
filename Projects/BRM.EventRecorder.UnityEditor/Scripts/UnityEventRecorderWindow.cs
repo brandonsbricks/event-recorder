@@ -14,6 +14,6 @@ namespace BRM.EventRecorder.UnityEditor
             window.Show();
         }
         
-        protected override EventService _eventService => _eventServiceLocal ?? (_eventServiceLocal = new UnityEventServiceFactory().Create());
+        protected override RecordingService _recordingService => _recordingServiceLocal ?? (_recordingServiceLocal = new UnityRecordingServiceFactory().Create());
     }
 }

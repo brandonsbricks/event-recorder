@@ -3,7 +3,7 @@ using BRM.EventRecorder.UnityEvents.Models;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace BRM.EventRecorder.UnityEvents.Subscribers
+namespace BRM.EventRecorder.UnityEvents.Recorders
 {
     public class DropdownSubscriber : TouchSubscriber<Dropdown, DropdownEvent>
     {

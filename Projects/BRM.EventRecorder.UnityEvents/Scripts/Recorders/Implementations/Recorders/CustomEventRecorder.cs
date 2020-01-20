@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using BRM.EventRecorder.UnityEvents.Models;
 
-namespace BRM.EventRecorder.UnityEvents.Subscribers
+namespace BRM.EventRecorder.UnityEvents.Recorders
 {
     public class CustomEventRecorder : EventRecorder
     {
@@ -10,14 +10,14 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
 
         public void AddEvent(string eventData)
         {
-            var newEvent = new StringEvent(eventData);
+            var newEvent = new StringEvent(StringEvent.CustomEvent, eventData);
             _events.Add(newEvent);
         }
 
         public override EventModelCollection ExtractNewEvents()
         {
             var collection = new EventModelCollection();
-            collection.CustomEvents.AddRange(_events);
+            collection.StringEvents.AddRange(_events);
             _events.Clear();
             
             return collection;

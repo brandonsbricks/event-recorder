@@ -2,6 +2,11 @@ using BRM.EventRecorder.UnityEvents.Models;
 
 namespace BRM.EventRecorder.UnityEvents.Interfaces
 {
+    public interface IGui
+    {
+        void OnGui();
+    }
+
     public interface IUpdate
     {
         void OnUpdate();
@@ -26,6 +31,6 @@ namespace BRM.EventRecorder.UnityEvents.Interfaces
     
     public interface IEventFactory
     {
-        EventService Create();
+        RecordingService Create();
     }
 }

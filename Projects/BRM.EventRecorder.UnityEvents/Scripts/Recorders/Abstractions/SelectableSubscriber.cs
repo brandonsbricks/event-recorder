@@ -4,7 +4,7 @@ using BRM.EventRecorder.UnityEvents.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace BRM.EventRecorder.UnityEvents.Subscribers
+namespace BRM.EventRecorder.UnityEvents.Recorders
 {
     public abstract class SelectableSubscriber<TSelectable, TModel> : EventSubscriber where TSelectable : Object where TModel : ComponentEventModel
     {

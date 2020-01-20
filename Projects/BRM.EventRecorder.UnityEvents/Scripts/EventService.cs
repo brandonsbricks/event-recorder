@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using BRM.EventRecorder.UnityEvents.Interfaces;
 using BRM.EventRecorder.UnityEvents.Models;
-using BRM.EventRecorder.UnityEvents.Subscribers;
+using BRM.EventRecorder.UnityEvents.Recorders;
 
 namespace BRM.EventRecorder.UnityEvents
 {    
     
-    public class EventService : ISubscriberCollection
+    public class RecordingService : ISubscriberCollection
     {
         public readonly EventAndAppPayload Payload = new EventAndAppPayload();
         public int EventCount => Payload.EventCount;
         
         private readonly EventRecorderCollection _allEventRecorders = null;
         
-        public EventService(List<EventSubscriber> subscribers, List<EventRecorder> recorders)
+        public RecordingService(List<EventSubscriber> subscribers, List<EventRecorder> recorders)
         {
             _allEventRecorders = new EventRecorderCollection(subscribers, recorders);
         }
@@ -29,6 +29,10 @@ namespace BRM.EventRecorder.UnityEvents
         public List<IUpdate> GetUpdaters()
         {
             return _allEventRecorders.GetUpdaters();
+        }
+        public List<IGui> GetGuiers()
+        {
+            return _allEventRecorders.GetGuiers();
         }
 
         public void ResetSubscriptions()

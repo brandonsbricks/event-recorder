@@ -3,7 +3,7 @@ using BRM.EventRecorder.UnityEvents.Interfaces;
 using BRM.EventRecorder.UnityEvents.Models;
 using UnityEngine;
 
-namespace BRM.EventRecorder.UnityEvents.Subscribers
+namespace BRM.EventRecorder.UnityEvents.Recorders
 {
     public class TransformRecorder : EventRecorder, IUpdate
     {

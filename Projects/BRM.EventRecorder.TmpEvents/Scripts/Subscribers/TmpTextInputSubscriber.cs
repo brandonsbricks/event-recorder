@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using BRM.EventRecorder.UnityEvents.Models;
-using BRM.EventRecorder.UnityEvents.Subscribers;
+using BRM.EventRecorder.UnityEvents.Recorders;
 using TMPro;
 using UnityEngine.Events;
 

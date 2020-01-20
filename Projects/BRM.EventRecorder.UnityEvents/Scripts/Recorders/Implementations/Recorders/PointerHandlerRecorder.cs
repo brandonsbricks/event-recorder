@@ -4,7 +4,7 @@ using BRM.EventRecorder.UnityEvents.Models;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace BRM.EventRecorder.UnityEvents.Subscribers
+namespace BRM.EventRecorder.UnityEvents.Recorders
 {
     public class PointerHandlerRecorder : EventRecorder, IUpdate
     {

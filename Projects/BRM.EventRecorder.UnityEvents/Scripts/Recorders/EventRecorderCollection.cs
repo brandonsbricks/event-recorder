@@ -3,7 +3,7 @@ using System.Linq;
 using BRM.EventRecorder.UnityEvents.Interfaces;
 using BRM.EventRecorder.UnityEvents.Models;
 
-namespace BRM.EventRecorder.UnityEvents.Subscribers
+namespace BRM.EventRecorder.UnityEvents.Recorders
 {
     public class EventRecorderCollection : EventSubscriber, ISubscriberCollection
     {
@@ -83,7 +83,7 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
             collection.SliderEvents = eventCollectionList.SelectMany(col => col.SliderEvents).ToList();
             collection.DropdownEvents = eventCollectionList.SelectMany(col => col.DropdownEvents).ToList();
             collection.TextInputEvents = eventCollectionList.SelectMany(col => col.TextInputEvents).ToList();
-            collection.CustomEvents = eventCollectionList.SelectMany(col => col.CustomEvents).ToList();
+            collection.StringEvents = eventCollectionList.SelectMany(col => col.StringEvents).ToList();
 
             return collection;
         }
@@ -91,6 +91,10 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
         public List<IUpdate> GetUpdaters()
         {
             return _recorders.Where(sub => sub is IUpdate).Cast<IUpdate>().ToList();
+        }
+        public List<IGui> GetGuiers()
+        {
+            return _recorders.Where(sub => sub is IGui).Cast<IGui>().ToList();
         }
     }
 }

@@ -3,9 +3,9 @@ using BRM.EventRecorder.UnityEvents;
 
 namespace BRM.EventRecorder.TmpEvents
 {
-    public class TmpEventServiceFactory : UnityEventServiceFactory
+    public class TmpRecordingServiceFactory : UnityRecordingServiceFactory
     {
-        public override EventService Create()
+        public override RecordingService Create()
         {
             var service = base.Create();
             service.AddUniqueSubscriber(new TmpDropdownSubscriber());

@@ -18,7 +18,7 @@ namespace BRM.EventRecorder.UnityEditor
     {
         #region Variables
 
-        protected EventService _eventServiceLocal;
+        protected RecordingService _recordingServiceLocal;
         private Vector2 _verticalScrollPosition;
         private static GUIStyle _toggleButtonStyleNormal;
         private static GUIStyle _toggleButtonStyleToggled;
@@ -26,7 +26,7 @@ namespace BRM.EventRecorder.UnityEditor
         private ISerializeText _serializer;
         private IWriteFiles _fileWriter;
 
-        protected abstract EventService _eventService { get; }
+        protected abstract RecordingService _recordingService { get; }
 
         protected virtual string OutputFilePath
         {
@@ -50,11 +50,11 @@ namespace BRM.EventRecorder.UnityEditor
         private bool _showSlides = true;
         private bool _showDropdowns = true;
         private bool _showTextInputs = true;
-        private bool _showIPointers = true;
+        private bool _showPointers = true;
         private bool _showTransforms = true;
         private bool _showSimpleTouches = true;
         private bool _showSceneChanges = true;
-        private bool _showCustomEvents = true;
+        private bool _showStringEvents = true;
         private bool _useSearch = false;
         
         private string _searchTerm;
@@ -62,6 +62,7 @@ namespace BRM.EventRecorder.UnityEditor
         private int _lastEventCount;
 
         private event Action _onUpdate;
+        private event Action _onGui;
 
         #endregion
 
@@ -85,6 +86,7 @@ namespace BRM.EventRecorder.UnityEditor
                 EditorGUILayout.LabelField("Start the editor to begin collecting events.");
                 return;
             }
+            _onGui?.Invoke();
 
             #region initialize variables only editable in ongui
 
@@ -101,11 +103,11 @@ namespace BRM.EventRecorder.UnityEditor
 
             #endregion
 
-            var eventCollection = _eventService.Payload.GetEventModels();
+            var eventCollection = _recordingService.Payload.GetEventModels();
             if (eventCollection.EventCount != _lastEventCount)
             {
-                _eventService.UpdatePayload();
-                eventCollection = _eventService.Payload.GetEventModels();
+                _recordingService.UpdatePayload();
+                eventCollection = _recordingService.Payload.GetEventModels();
                 _lastEventCount = eventCollection.EventCount;
             }
             FilterAndSortEvents(eventCollection, ref _eventDisplayAndTimes);
@@ -152,7 +154,7 @@ namespace BRM.EventRecorder.UnityEditor
             
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("           ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
-            DisplayEventTypeToggle("IPointers", ref _showIPointers, collection.PointerEvents.Count);
+            DisplayEventTypeToggle("IPointers", ref _showPointers, collection.PointerEvents.Count);
             DisplayEventTypeToggle("Sliders", ref _showSlides, collection.SliderEvents.Count);
             DisplayEventTypeToggle("Toggles", ref _showToggles, collection.ToggleEvents.Count);
             GUILayout.EndHorizontal();
@@ -166,7 +168,7 @@ namespace BRM.EventRecorder.UnityEditor
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("           ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
             DisplayEventTypeToggle("Transforms", ref _showTransforms, collection.TransformEvents.Count);
-            DisplayEventTypeToggle("Custom", ref _showCustomEvents, collection.CustomEvents.Count);
+            DisplayEventTypeToggle("String", ref _showStringEvents, collection.StringEvents.Count);
             GUILayout.EndHorizontal();
             
             EditorGUILayout.Space();
@@ -190,8 +192,8 @@ namespace BRM.EventRecorder.UnityEditor
         {
             if (GUILayout.Button("Refresh", GUILayout.ExpandWidth(true)))
             {
-                ResetSubscriptions();
-                _fileWriter.Write(_outputFilePath, _eventService.Payload);
+                ResetSubscriptionsAndUpdatePayload();
+                _fileWriter.Write(_outputFilePath, _recordingService.Payload);
                 AssetDatabase.Refresh();
             }
 
@@ -202,9 +204,9 @@ namespace BRM.EventRecorder.UnityEditor
         {
             if (GUILayout.Button("Clear", GUILayout.ExpandWidth(true)))
             {
-                _eventService.ClearRecording();
-                ResetSubscriptions();
-                _fileWriter.Write(_outputFilePath, _eventService.Payload);
+                _recordingService.ClearRecording();
+                ResetSubscriptionsAndUpdatePayload();
+                _fileWriter.Write(_outputFilePath, _recordingService.Payload);
             }
         }
 
@@ -244,7 +246,7 @@ namespace BRM.EventRecorder.UnityEditor
             {
                 AddEventDisplayText(collection.TransformEvents, ref eventDisplayAndTimes);
             }
-            if (_showIPointers)
+            if (_showPointers)
             {
                 AddEventDisplayText(collection.PointerEvents, ref eventDisplayAndTimes);
             }
@@ -252,9 +254,9 @@ namespace BRM.EventRecorder.UnityEditor
             {
                 AddEventDisplayText(collection.SimpleTouchEvents, ref eventDisplayAndTimes);
             }
-            if (_showCustomEvents)
+            if (_showStringEvents)
             {
-                AddEventDisplayText(collection.CustomEvents, ref eventDisplayAndTimes);
+                AddEventDisplayText(collection.StringEvents, ref eventDisplayAndTimes);
             }
 
             eventDisplayAndTimes = eventDisplayAndTimes.OrderBy(displayAndTime => displayAndTime.Item2).ToList();
@@ -301,7 +303,7 @@ namespace BRM.EventRecorder.UnityEditor
         {
             if (!_wasPlaying && Application.isPlaying)
             {
-                ResetSubscriptions();
+                ResetSubscriptionsAndUpdatePayload();
             }
 
             if (!Application.isPlaying && _wasPlaying)
@@ -327,22 +329,28 @@ namespace BRM.EventRecorder.UnityEditor
 
         private void OnClick()
         {
-            ResetSubscriptions();
-            _fileWriter.Write(_outputFilePath, _eventService.Payload);
+            ResetSubscriptionsAndUpdatePayload();
+            _fileWriter.Write(_outputFilePath, _recordingService.Payload);
 
             Repaint();
         }
 
-        private void ResetSubscriptions()
+        private void ResetSubscriptionsAndUpdatePayload()
         {
-            var updators = _eventService.GetUpdaters();
+            var updators = _recordingService.GetUpdaters();
             updators.ForEach(updator =>
             {
                 _onUpdate -= updator.OnUpdate;
                 _onUpdate += updator.OnUpdate;
             });
-            _eventService.ResetSubscriptions();
-            _eventService.UpdatePayload();
+            var guiers = _recordingService.GetGuiers();
+            guiers.ForEach(guier =>
+            {
+                _onGui -= guier.OnGui;
+                _onGui += guier.OnGui;
+            });
+            _recordingService.ResetSubscriptions();
+            _recordingService.UpdatePayload();
         }
 
         private void OnEditorStop()

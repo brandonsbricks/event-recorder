@@ -5,12 +5,15 @@ namespace BRM.EventRecorder.UnityEvents.Models
     [Serializable]
     public class StringEvent : EventModelBase, IEquatable<StringEvent>
     {
+        public const string KeypressEvent = nameof(KeypressEvent);
+        public const string CustomEvent = nameof(CustomEvent);
+        
         public string EventData;
 
         /// <summary>
         /// Fill this with whatever custom json, xml, yaml, or other text data
         /// </summary>
-        public StringEvent(string eventData) : base(nameof(StringEvent))
+        public StringEvent(string eventType, string eventData) : base(eventType)
         {
             EventData = eventData;
         }

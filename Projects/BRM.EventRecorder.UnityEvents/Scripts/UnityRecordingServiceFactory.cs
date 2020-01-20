@@ -1,18 +1,17 @@
 ﻿using System.Collections.Generic;
 using BRM.EventRecorder.UnityEvents.Interfaces;
-using BRM.EventRecorder.UnityEvents.Subscribers;
+using BRM.EventRecorder.UnityEvents.Recorders;
 
 namespace BRM.EventRecorder.UnityEvents
 {
     //todo: acceptable ocp violation. modify when recorder is added 
-    public class UnityEventServiceFactory : IEventFactory
+    public class UnityRecordingServiceFactory : IEventFactory
     {
-        public virtual EventService Create()
+        public virtual RecordingService Create()
         {
-            var service = new EventService(
+            var service = new RecordingService(
                 new List<EventSubscriber>
                 {
-                    //generic Unity UI subscribers
                     new SceneChangedSubscriber(),
                     new SliderSubscriber(),
                     new DropdownSubscriber(),
@@ -21,10 +20,10 @@ namespace BRM.EventRecorder.UnityEvents
                 },
                 new List<EventRecorder>
                 {
-                    //generic touch events
                     new SimpleTouchRecorder(),
                     new PointerHandlerRecorder(),
                     new TransformRecorder(),
+                    new KeypressRecorder(),
                     new CustomEventRecorder(),
                 });
             return service;

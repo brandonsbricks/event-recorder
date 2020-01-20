@@ -2,6 +2,7 @@
 
 namespace BRM.EventRecorder.UnityEvents.Models
 {
+    [Serializable]
     public class StringEvent : EventModelBase, IEquatable<StringEvent>
     {
         public string EventData;

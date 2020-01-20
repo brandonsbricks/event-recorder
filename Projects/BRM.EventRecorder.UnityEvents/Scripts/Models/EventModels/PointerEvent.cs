@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace BRM.EventRecorder.UnityEvents.Models
 {
+    [Serializable]
     public class PointerEvent : ComponentEventModel
     {
         public const string IPointerUpEvent = nameof(IPointerUpEvent);

@@ -54,6 +54,7 @@ namespace BRM.EventRecorder.UnityEditor
         private bool _showTransforms = true;
         private bool _showSimpleTouches = true;
         private bool _showSceneChanges = true;
+        private bool _showCustomEvents = true;
         private bool _useSearch = false;
         
         private string _searchTerm;
@@ -151,8 +152,8 @@ namespace BRM.EventRecorder.UnityEditor
             
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("           ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
-            DisplayEventTypeToggle("IPointers", ref _showIPointers, collection.IPointerEvents.Count);
-            DisplayEventTypeToggle("Sliders", ref _showDropdowns, collection.SliderEvents.Count);
+            DisplayEventTypeToggle("IPointers", ref _showIPointers, collection.PointerEvents.Count);
+            DisplayEventTypeToggle("Sliders", ref _showSlides, collection.SliderEvents.Count);
             DisplayEventTypeToggle("Toggles", ref _showToggles, collection.ToggleEvents.Count);
             GUILayout.EndHorizontal();
             
@@ -164,7 +165,8 @@ namespace BRM.EventRecorder.UnityEditor
             
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("           ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
-            DisplayEventTypeToggle("Transforms", ref _showDropdowns, collection.DropdownEvents.Count);
+            DisplayEventTypeToggle("Transforms", ref _showTransforms, collection.TransformEvents.Count);
+            DisplayEventTypeToggle("Custom", ref _showCustomEvents, collection.CustomEvents.Count);
             GUILayout.EndHorizontal();
             
             EditorGUILayout.Space();
@@ -244,11 +246,15 @@ namespace BRM.EventRecorder.UnityEditor
             }
             if (_showIPointers)
             {
-                AddEventDisplayText(collection.IPointerEvents, ref eventDisplayAndTimes);
+                AddEventDisplayText(collection.PointerEvents, ref eventDisplayAndTimes);
             }
             if (_showSimpleTouches)
             {
                 AddEventDisplayText(collection.SimpleTouchEvents, ref eventDisplayAndTimes);
+            }
+            if (_showCustomEvents)
+            {
+                AddEventDisplayText(collection.CustomEvents, ref eventDisplayAndTimes);
             }
 
             eventDisplayAndTimes = eventDisplayAndTimes.OrderBy(displayAndTime => displayAndTime.Item2).ToList();

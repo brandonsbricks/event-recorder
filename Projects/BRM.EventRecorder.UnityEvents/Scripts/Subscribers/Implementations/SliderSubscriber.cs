@@ -24,7 +24,6 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
             {
                 var newEvent = new SliderEvent
                 {
-                    PropertyName = "value",
                     NewValue = newVal,
                 };
                 PopulateCommonEventData(ref newEvent, slider.transform);

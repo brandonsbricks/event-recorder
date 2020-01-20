@@ -5,12 +5,13 @@ using BRM.EventRecorder.UnityEvents.Subscribers;
 
 namespace BRM.EventRecorder.UnityEvents
 {    
+    
     public class EventService : ISubscriberCollection
     {
         public readonly EventAndAppPayload Payload = new EventAndAppPayload();
         public int EventCount => Payload.EventCount;
         
-        protected readonly EventRecorderCollection _allEventRecorders = null;
+        private readonly EventRecorderCollection _allEventRecorders = null;
         
         public EventService(List<EventSubscriber> subscribers, List<EventRecorder> recorders)
         {
@@ -47,9 +48,9 @@ namespace BRM.EventRecorder.UnityEvents
             Payload.AppendNewEventsUniquely(newEvents);
         }
 
-        public void SetServer(string server)
+        public void SetAppValues(string gitSha, string server)
         {
-            Payload.SetServer(server);
+            Payload.SetAppValues(gitSha, server);
         }
 
         public void ToggleRecording(bool record)

@@ -10,6 +10,7 @@ namespace BRM.EventRecorder.UnityEvents
         
         protected virtual EventService _eventService => _eventServiceLocal ?? (_eventServiceLocal = new UnityEventServiceFactory().Create());
         protected EventService _eventServiceLocal;
+        
         private event Action _onUpdate;
 
         #region Public
@@ -23,16 +24,16 @@ namespace BRM.EventRecorder.UnityEvents
         {
             _eventServiceLocal = service;
         }
+        
+        public void SetAppData(string gitSha, string server)
+        {
+            _eventService.SetAppValues(gitSha, server);
+        }
 
         public EventAndAppPayload GetPayload()
         {
             _eventService.UpdatePayload();
             return _eventService.Payload;
-        }
-
-        public void SetServer(string server)
-        {
-            _eventService.SetServer(server);
         }
 
         public void ToggleRecording(bool record)

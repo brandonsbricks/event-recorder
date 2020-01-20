@@ -2,9 +2,9 @@
 
 namespace BRM.EventAnalysis.UnityPlayback
 {
-    public class SimpleTouchReplayer : Replayer<SimpleTouchEvent>
+    public class SimpleTouchReplayer : Replayer<PositionEvent>
     {
-        public override void Replay(SimpleTouchEvent model)
+        public override void Replay(PositionEvent model)
         {
             //todo: display touch ui
         }

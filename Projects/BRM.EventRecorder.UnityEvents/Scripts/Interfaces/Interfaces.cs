@@ -7,11 +7,6 @@ namespace BRM.EventRecorder.UnityEvents.Interfaces
         void OnUpdate();
     }
 
-    public interface IHoldEventData
-    {
-        string GetJson();
-    }
-    
     public interface ISubscriberCollection
     {
         void AddUniqueSubscriber(EventSubscriber subscriber);
@@ -27,5 +22,10 @@ namespace BRM.EventRecorder.UnityEvents.Interfaces
     public interface IRecordEvents
     {
         EventModelCollection ExtractNewEvents();
+    }
+    
+    public interface IEventFactory
+    {
+        EventService Create();
     }
 }

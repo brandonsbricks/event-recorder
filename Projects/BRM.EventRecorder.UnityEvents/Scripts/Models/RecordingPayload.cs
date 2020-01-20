@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace BRM.EventRecorder.UnityEvents.Models
 {
-    
     [Serializable]
     public class EventAndAppPayload
     {
@@ -15,20 +14,20 @@ namespace BRM.EventRecorder.UnityEvents.Models
 
         public int EventCount => EventModels.EventCount;
 
+        public void SetAppValues(string gitSha, string server)
+        {
+            AppData.SetValues(gitSha, server);
+        }
+        
         public void UpdateProperties()
         {
-            AppData.SetProperties();
+            AppData.SetVersion();
             DeviceData.SetProperties();
         }
 
         public void AppendNewEventsUniquely(EventModelCollection newEvents)
         {
             EventModels.AppendNewEventsUniquely(newEvents);
-        }
-
-        public void SetServer(string server)
-        {
-            AppData.Server = server;
         }
 
         public EventModelCollection GetEventModels()
@@ -50,17 +49,17 @@ namespace BRM.EventRecorder.UnityEvents.Models
         public string UnityVersion;
         public bool IsEditor;
 
-        public string GitSha = "";
+        public string GitSha = "unassigned";
         public string Server = "unassigned";
 
-        public void SetProperties()
+        public void SetVersion()
         {
             AppVersion = Application.version;
             UnityVersion = Application.unityVersion;
             IsEditor = Application.isEditor;
         }
 
-        public void SetValues(string gitSha, string server = "unassigned")//todo: expose via interface
+        public void SetValues(string gitSha, string server)
         {
             GitSha = gitSha;
             Server = server;
@@ -95,29 +94,33 @@ namespace BRM.EventRecorder.UnityEvents.Models
     public class EventModelCollection
     {
         public List<SceneChangedEvent> SceneChangedEvents = new List<SceneChangedEvent>();
-        public List<SimpleTouchEvent> SimpleTouchEvents = new List<SimpleTouchEvent>();
-        public List<TransformEvent> TransformEvents = new List<TransformEvent>();
-        public List<PointerEvent> IPointerEvents = new List<PointerEvent>();
+        public List<PositionEvent> SimpleTouchEvents = new List<PositionEvent>();
+        public List<StringEvent> CustomEvents = new List<StringEvent>();
+        public List<PointerEvent> PointerEvents = new List<PointerEvent>();
         public List<TextInputEvent> TextInputEvents = new List<TextInputEvent>();
         public List<SliderEvent> SliderEvents = new List<SliderEvent>();
         public List<DropdownEvent> DropdownEvents = new List<DropdownEvent>();
         public List<ToggleEvent> ToggleEvents = new List<ToggleEvent>();
+        public List<TransformEvent> TransformEvents = new List<TransformEvent>();
 
         public List<EventModelBase> GetAllEvents()
         {
             var allEvents = new List<EventModelBase>();
             allEvents.AddRange(SceneChangedEvents);
             allEvents.AddRange(SimpleTouchEvents);
-            allEvents.AddRange(IPointerEvents);
-            allEvents.AddRange(TransformEvents);
+            allEvents.AddRange(CustomEvents);
+            allEvents.AddRange(PointerEvents);
             allEvents.AddRange(TextInputEvents);
             allEvents.AddRange(SliderEvents);
             allEvents.AddRange(DropdownEvents);
             allEvents.AddRange(ToggleEvents);
+            allEvents.AddRange(TransformEvents);
             return allEvents;
         }
 
-        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + TransformEvents.Count + IPointerEvents.Count + TextInputEvents.Count + SliderEvents.Count + DropdownEvents.Count + ToggleEvents.Count;
+        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + CustomEvents.Count + PointerEvents.Count + 
+                                 TextInputEvents.Count + SliderEvents.Count + DropdownEvents.Count + 
+                                 ToggleEvents.Count + TransformEvents.Count;
         
         /// <summary>
         /// Removes any events already in the collection
@@ -126,12 +129,13 @@ namespace BRM.EventRecorder.UnityEvents.Models
         {
             AddUnique(SceneChangedEvents, newCollection.SceneChangedEvents);
             AddUnique(SimpleTouchEvents, newCollection.SimpleTouchEvents);
-            AddUnique(IPointerEvents, newCollection.IPointerEvents);
-            AddUnique(TransformEvents, newCollection.TransformEvents);
+            AddUnique(CustomEvents, newCollection.CustomEvents);
+            AddUnique(PointerEvents, newCollection.PointerEvents);
             AddUnique(TextInputEvents, newCollection.TextInputEvents);
             AddUnique(SliderEvents, newCollection.SliderEvents);
             AddUnique(DropdownEvents, newCollection.DropdownEvents);
             AddUnique(ToggleEvents, newCollection.ToggleEvents);
+            AddUnique(TransformEvents, newCollection.TransformEvents);
         }
         
         public void SortByTimestamp()
@@ -140,12 +144,13 @@ namespace BRM.EventRecorder.UnityEvents.Models
             
             SceneChangedEvents = SceneChangedEvents.OrderBy(item => orderFunc).ToList();
             SimpleTouchEvents = SimpleTouchEvents.OrderBy(item => orderFunc).ToList();
-            TransformEvents = TransformEvents.OrderBy(item => orderFunc).ToList();
-            IPointerEvents = IPointerEvents.OrderBy(item => orderFunc).ToList();
+            CustomEvents = CustomEvents.OrderBy(item => orderFunc).ToList();
+            PointerEvents = PointerEvents.OrderBy(item => orderFunc).ToList();
             TextInputEvents = TextInputEvents.OrderBy(item => orderFunc).ToList();
             SliderEvents = SliderEvents.OrderBy(item => orderFunc).ToList();
             DropdownEvents = DropdownEvents.OrderBy(item => orderFunc).ToList();
             ToggleEvents = ToggleEvents.OrderBy(item => orderFunc).ToList();
+            TransformEvents = TransformEvents.OrderBy(item => orderFunc).ToList();
         }
 
         private IEnumerable<T> GetUnique<T>(IEnumerable<T> existingList, IEnumerable<T> newList) where T : class

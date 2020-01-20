@@ -5,10 +5,11 @@ namespace BRM.EventRecorder.UnityEvents.Models
     [Serializable]
     public class ToggleEvent : PointerEvent
     {
-        public string PropertyName;
+        public const string Name = nameof(ToggleEvent);
+        
         public bool NewValue;
         
-        public ToggleEvent() : base(nameof(ToggleEvent))
+        public ToggleEvent() : base(Name)
         {
             IsFromEventSubscription = true;
         }

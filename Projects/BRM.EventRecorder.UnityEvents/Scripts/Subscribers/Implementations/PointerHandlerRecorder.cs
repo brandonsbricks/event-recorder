@@ -39,7 +39,7 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
         public override EventModelCollection ExtractNewEvents()
         {
             var collection = new EventModelCollection();
-            collection.IPointerEvents.AddRange(_events);
+            collection.PointerEvents.AddRange(_events);
             _events.Clear();
             return collection;
         }
@@ -116,7 +116,7 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
             {
                 GameObjectName = UnityNamingUtils.GetHierarchyName(targetGo.transform),
                 ComponentType = typeof(T).FullName,
-                TouchPoint = Input.mousePosition,
+                Position = Input.mousePosition,
             };
             _events.Add(newEvent);
         }

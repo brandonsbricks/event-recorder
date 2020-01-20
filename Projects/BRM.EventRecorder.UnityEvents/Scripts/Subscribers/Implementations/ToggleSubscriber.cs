@@ -32,7 +32,6 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
             {
                 var newEvent = new ToggleEvent
                 {
-                    PropertyName = "isOn",
                     NewValue = newValue,
                 };
                 PopulateCommonEventData(ref newEvent, toggle.transform);

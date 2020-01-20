@@ -7,7 +7,7 @@ namespace BRM.EventAnalysis.UnityPlayback
     {
         public static PointerEventData Create(PointerEvent model)
         {
-            return new PointerEventData(EventSystem.current){position = model.TouchPoint};
+            return new PointerEventData(EventSystem.current){position = model.Position};
         }
     }
 }

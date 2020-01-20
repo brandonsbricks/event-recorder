@@ -8,10 +8,10 @@ namespace BRM.EventRecorder.TmpEditor
 {
     public class TmpRecorderWindow : RecorderWindow
     {
-        [MenuItem("/" + Constants.PackageDeveloper + "/" + Constants.DisplayedAppName + ": Unity+Tmp Ui")]
+        [MenuItem("/" + Constants.PackageDeveloper + "/" + Constants.DisplayedAppName + ": Unity+Tmp")]
         private static void ShowWindow()
         {
-            var window = GetWindow<TmpRecorderWindow>("Unity + Tmp Ui Events");
+            var window = GetWindow<TmpRecorderWindow>("Unity + Tmp Events");
             window.minSize = Vector2.one * 300;
             window.Show();
         }

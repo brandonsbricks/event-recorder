@@ -34,7 +34,6 @@ namespace BRM.EventRecorder.TmpEvents.Subscribers
             {
                 var newEvent = new DropdownEvent(TmpEventNames.TmpDropdownEvent)
                 {
-                    PropertyName = "value",
                     NewIntValue = newValue,
                     NewStringValue = tmpDropdown.options[newValue].text,
                 };

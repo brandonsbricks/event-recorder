@@ -27,11 +27,10 @@ namespace BRM.EventAnalysis.UnityPlayback
             
             var replayers = new Dictionary<string, Action<EventModelBase>>
             {
-                {nameof(SceneChangedEvent), modelBase => sceneChangedReplayer.Replay(modelBase as SceneChangedEvent)},
+                {SceneChangedEvent.Name, modelBase => sceneChangedReplayer.Replay(modelBase as SceneChangedEvent)},
 
-                {SimpleTouchEvent.TouchUp, modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
-                {SimpleTouchEvent.TouchDown, modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
-                {nameof(SimpleTouchEvent), modelBase => simpleTouchReplayer.Replay(modelBase as SimpleTouchEvent)},
+                {PositionEvent.TouchUp, modelBase => simpleTouchReplayer.Replay(modelBase as PositionEvent)},
+                {PositionEvent.TouchDown, modelBase => simpleTouchReplayer.Replay(modelBase as PositionEvent)},
                 
                 {PointerEvent.IPointerDownEvent, modelBase => pointerDownReplayer.Replay(modelBase as PointerEvent)},
                 {PointerEvent.IPointerUpEvent, modelBase => pointerUpReplayer.Replay(modelBase as PointerEvent)},
@@ -39,12 +38,12 @@ namespace BRM.EventAnalysis.UnityPlayback
                 {PointerEvent.IPointerEnterEvent, modelBase => pointerEnterReplayer.Replay(modelBase as PointerEvent)},
                 {PointerEvent.IPointerExitEvent, modelBase => pointerExitReplayer.Replay(modelBase as PointerEvent)},
 
-                {nameof(ToggleEvent), modelBase => toggleReplayer.Replay(modelBase as ToggleEvent)},
-                {nameof(SliderEvent), modelBase => sliderReplayer.Replay(modelBase as SliderEvent)},
+                {ToggleEvent.Name, modelBase => toggleReplayer.Replay(modelBase as ToggleEvent)},
+                {SliderEvent.Name, modelBase => sliderReplayer.Replay(modelBase as SliderEvent)},
                 {DropdownEvent.UnityDropdownEvent, modelBase => dropdownReplayer.Replay(modelBase as DropdownEvent)},
                 {TextInputEvent.UnityTextInputEvent, modelBase => textInputReplayer.Replay(modelBase as TextInputEvent)},
                 
-                {nameof(TransformEvent), modelBase => transformReplayer.Replay(modelBase as TransformEvent)},
+                {TransformEvent.Name, modelBase => transformReplayer.Replay(modelBase as TransformEvent)},
             };
             return replayers;
         }

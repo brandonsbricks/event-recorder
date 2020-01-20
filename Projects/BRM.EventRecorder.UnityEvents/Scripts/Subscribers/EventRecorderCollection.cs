@@ -78,11 +78,12 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
             collection.SceneChangedEvents = eventCollectionList.SelectMany(col => col.SceneChangedEvents).ToList();
             collection.SimpleTouchEvents = eventCollectionList.SelectMany(col => col.SimpleTouchEvents).ToList();
             collection.TransformEvents = eventCollectionList.SelectMany(col => col.TransformEvents).ToList();
-            collection.IPointerEvents = eventCollectionList.SelectMany(col => col.IPointerEvents).ToList();
+            collection.PointerEvents = eventCollectionList.SelectMany(col => col.PointerEvents).ToList();
             collection.ToggleEvents = eventCollectionList.SelectMany(col => col.ToggleEvents).ToList();
             collection.SliderEvents = eventCollectionList.SelectMany(col => col.SliderEvents).ToList();
             collection.DropdownEvents = eventCollectionList.SelectMany(col => col.DropdownEvents).ToList();
             collection.TextInputEvents = eventCollectionList.SelectMany(col => col.TextInputEvents).ToList();
+            collection.CustomEvents = eventCollectionList.SelectMany(col => col.CustomEvents).ToList();
 
             return collection;
         }

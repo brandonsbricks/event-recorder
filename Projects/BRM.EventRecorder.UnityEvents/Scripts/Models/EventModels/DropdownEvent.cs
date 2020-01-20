@@ -7,7 +7,6 @@ namespace BRM.EventRecorder.UnityEvents.Models
     {
         public const string UnityDropdownEvent = nameof(UnityDropdownEvent);
 
-        public string PropertyName;
         public int NewIntValue;
         public string NewStringValue;
         

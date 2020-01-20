@@ -12,10 +12,10 @@ namespace BRM.EventAnalysis.UnityPlayback
     public class ReplayController : MonoBehaviour
     {
         #pragma warning disable 0649
-        [SerializeField] private List<ReplayInstruction> _replayInstructions;
         [SerializeField] private bool _enableLogging = true;
         #pragma warning restore 0649
         
+        private readonly List<ReplayInstruction> _replayInstructions = new List<ReplayInstruction>();
         private IDebug _debugger = new UnityDebugger();
         
         [Serializable]
@@ -38,10 +38,9 @@ namespace BRM.EventAnalysis.UnityPlayback
         }
 
         /// <summary>
-        /// Set replay instructions from <see cref="ReplayInstructionFactory"/> or another customized source which maps
-        /// <para>an event type to its corresponding replay action</para>
+        /// Set replay instructions from <see cref="ReplayInstructionFactory"/> or another customized source which maps an event type to its corresponding replay action
+        /// <para>Add a new instruction for key "<see cref="CustomEvent"/>" as needed </para>
         /// </summary>
-        /// <param name="replayInstructions"></param>
         public void Initialize(Dictionary<string, Action<EventModelBase>> replayInstructions)
         {
             foreach (var kvp in replayInstructions)

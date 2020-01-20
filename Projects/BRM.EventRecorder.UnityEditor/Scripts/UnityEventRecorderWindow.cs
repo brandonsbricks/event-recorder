@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace BRM.EventRecorder.UnityEditor
 {
-    public class UnityUiRecorderWindow : RecorderWindow
+    public class UnityEventRecorderWindow : RecorderWindow
     {
-        [MenuItem("/" + Constants.PackageDeveloper + "/" + Constants.DisplayedAppName + ": Unity Ui")]
+        [MenuItem("/" + Constants.PackageDeveloper + "/" + Constants.DisplayedAppName + ": Unity Events")]
         private static void ShowWindow()
         {
-            var window = GetWindow<UnityUiRecorderWindow>("Unity Ui Events");
+            var window = GetWindow<UnityEventRecorderWindow>("Unity Events");
             window.minSize = Vector2.one * 300;
             window.Show();
         }

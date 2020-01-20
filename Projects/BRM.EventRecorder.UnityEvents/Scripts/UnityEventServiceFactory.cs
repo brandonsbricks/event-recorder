@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using BRM.EventRecorder.UnityEvents.Interfaces;
 using BRM.EventRecorder.UnityEvents.Subscribers;
 
 namespace BRM.EventRecorder.UnityEvents
@@ -24,13 +25,9 @@ namespace BRM.EventRecorder.UnityEvents
                     new SimpleTouchRecorder(),
                     new PointerHandlerRecorder(),
                     new TransformRecorder(),
+                    new CustomEventRecorder(),
                 });
             return service;
         }
-    }
-
-    public interface IEventFactory
-    {
-        EventService Create();
     }
 }

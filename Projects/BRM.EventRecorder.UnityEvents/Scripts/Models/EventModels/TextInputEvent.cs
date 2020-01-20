@@ -7,7 +7,6 @@ namespace BRM.EventRecorder.UnityEvents.Models
     {
         public const string UnityTextInputEvent = nameof(UnityTextInputEvent);
         
-        public string PropertyName;
         public string NewValue;
         
         public TextInputEvent(string eventTypeName) : base(eventTypeName)

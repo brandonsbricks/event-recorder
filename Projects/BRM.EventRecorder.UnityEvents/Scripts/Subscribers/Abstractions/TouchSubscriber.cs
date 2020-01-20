@@ -8,7 +8,7 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
         protected override void PopulateCommonEventData(ref TModel eventData, Transform componentTransform)
         {
             base.PopulateCommonEventData(ref eventData, componentTransform);
-            eventData.TouchPoint = Input.mousePosition;
+            eventData.Position = Input.mousePosition;
         }
     }
 }

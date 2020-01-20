@@ -8,17 +8,17 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
     public class SimpleTouchRecorder : EventRecorder, IUpdate
     {
         public override string Name => nameof(SimpleTouchRecorder);
-        private readonly List<SimpleTouchEvent> _events = new List<SimpleTouchEvent>();
+        private readonly List<PositionEvent> _events = new List<PositionEvent>();
         
         public void OnUpdate()
         {
             if (Input.GetMouseButtonDown(MouseButton.Left))
             {
-                CreateEvent(SimpleTouchEvent.TouchDown);
+                CreateEvent(PositionEvent.TouchDown);
             }
             if (Input.GetMouseButtonUp(MouseButton.Left))
             {
-                CreateEvent(SimpleTouchEvent.TouchUp);
+                CreateEvent(PositionEvent.TouchUp);
             }
         }
         
@@ -32,10 +32,9 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
         
         private void CreateEvent(string eventType)
         {
-            var newEvent = new SimpleTouchEvent
+            var newEvent = new PositionEvent(eventType)
             {
-                TouchPointProp = Input.mousePosition,
-                EventType = eventType,
+                Position = Input.mousePosition,
             };
             _events.Add(newEvent);
         }

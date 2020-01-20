@@ -33,7 +33,6 @@ namespace BRM.EventRecorder.UnityEvents.Subscribers
             {
                 var newEvent = new DropdownEvent(DropdownEvent.UnityDropdownEvent)
                 {
-                    PropertyName = "value",
                     NewIntValue = newValue,
                     NewStringValue = dropdown.options[newValue].text,
                 };

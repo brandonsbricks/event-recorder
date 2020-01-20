@@ -5,10 +5,11 @@ namespace BRM.EventRecorder.UnityEvents.Models
     [Serializable]
     public class SliderEvent : PointerEvent
     {
-        public string PropertyName;
+        public const string Name = nameof(SliderEvent);
+        
         public float NewValue;
         
-        public SliderEvent() : base(nameof(SliderEvent))
+        public SliderEvent() : base(Name)
         {
             IsFromEventSubscription = true;
         }

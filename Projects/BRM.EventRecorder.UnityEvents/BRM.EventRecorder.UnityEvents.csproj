@@ -69,7 +69,8 @@
     <Compile Include="Scripts\Models\EventModels\TransformEvent.cs" />
     <Compile Include="Scripts\Models\RecordingPayload.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Recorders\CustomEventRecorder.cs" />
-    <Compile Include="Scripts\Recorders\Implementations\Recorders\KeypressRecorder.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Recorders\KeyboardRecorder.cs" />
+    <Compile Include="Scripts\Recorders\Implementations\Recorders\MouseButtonRecorder.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Recorders\PointerHandlerRecorder.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Recorders\TransformRecorder.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Subscribers\DropdownSubscriber.cs" />

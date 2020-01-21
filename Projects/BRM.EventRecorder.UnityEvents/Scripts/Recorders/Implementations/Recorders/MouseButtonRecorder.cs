@@ -6,11 +6,10 @@ using UnityEngine;
 
 namespace BRM.EventRecorder.UnityEvents.Recorders
 {
-    public class InputRecorder : EventRecorder, IUpdate
+    public class MouseButtonRecorder : EventRecorder, IUpdate
     {
-        public override string Name => nameof(InputRecorder);
+        public override string Name => nameof(MouseButtonRecorder);
         
-        private readonly List<StringEvent> _keypressEvents = new List<StringEvent>();
         private readonly List<MouseEvent> _mouseEvents = new List<MouseEvent>();
         private readonly List<KeyCode> _keyCodes;
 
@@ -20,18 +19,15 @@ namespace BRM.EventRecorder.UnityEvents.Recorders
             Down
         }
 
-        public InputRecorder()
+        public MouseButtonRecorder()
         {
-            _keyCodes = System.Enum.GetValues(typeof(KeyCode)).OfType<KeyCode>().Skip(1).ToList();
+            _keyCodes = System.Enum.GetValues(typeof(KeyCode)).OfType<KeyCode>().Where(code => code.ToString().ToLowerInvariant().Contains("mouse")).ToList();
         }
 
         public override EventModelCollection ExtractNewEvents()
         {
             var collection = new EventModelCollection();
-            collection.StringEvents.AddRange(_keypressEvents);
             collection.MouseEvents.AddRange(_mouseEvents);
-            
-            _keypressEvents.Clear();
             _mouseEvents.Clear();
 
             return collection;
@@ -58,20 +54,11 @@ namespace BRM.EventRecorder.UnityEvents.Recorders
             }
         }
 
-        private void CreateEvent(KeyPlace place, string eventData)//todo: does this record touch inputs?u
+        private void CreateEvent(KeyPlace place, string eventData)//todo: does this record touch inputs?
         {
-            if (eventData.Contains("Mouse"))
-            {
-                var eventType = place == KeyPlace.Down ? MouseEvent.MouseDownEvent : MouseEvent.MouseUpEvent;
-                var newEvent = new MouseEvent(eventType, eventData, Input.mousePosition);
-                _mouseEvents.Add(newEvent);
-            }
-            else
-            {
-                var eventType = place == KeyPlace.Down ? StringEvent.KeydownEvent : StringEvent.KeyupEvent;
-                var newEvent = new StringEvent(eventType, eventData);
-                _keypressEvents.Add(newEvent);
-            }
+            var eventType = place == KeyPlace.Down ? MouseEvent.MouseDownEvent : MouseEvent.MouseUpEvent;
+            var newEvent = new MouseEvent(eventType, eventData, Input.mousePosition);
+            _mouseEvents.Add(newEvent);
         }
     }
 }

@@ -22,7 +22,8 @@ namespace BRM.EventRecorder.UnityEvents
                 {
                     new PointerHandlerRecorder(),
                     new TransformRecorder(),
-                    new InputRecorder(),
+                    new KeyboardRecorder(),
+                    new MouseButtonRecorder(),
                     new CustomEventRecorder(),
                 });
             return service;

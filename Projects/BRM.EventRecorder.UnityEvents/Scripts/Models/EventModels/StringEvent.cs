@@ -5,7 +5,8 @@ namespace BRM.EventRecorder.UnityEvents.Models
     [Serializable]
     public class StringEvent : EventModelBase, IEquatable<StringEvent>
     {
-        public const string KeypressEvent = nameof(KeypressEvent);
+        public const string KeydownEvent = nameof(KeydownEvent);
+        public const string KeyupEvent = nameof(KeyupEvent);
         public const string CustomEvent = nameof(CustomEvent);
         
         public string EventData;

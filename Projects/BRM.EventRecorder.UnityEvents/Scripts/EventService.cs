@@ -30,10 +30,6 @@ namespace BRM.EventRecorder.UnityEvents
         {
             return _allEventRecorders.GetUpdaters();
         }
-        public List<IGui> GetGuiers()
-        {
-            return _allEventRecorders.GetGuiers();
-        }
 
         public void ResetSubscriptions()
         {

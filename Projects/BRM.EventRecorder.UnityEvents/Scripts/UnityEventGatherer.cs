@@ -7,14 +7,15 @@ namespace BRM.EventRecorder.UnityEvents
     public class UnityEventGatherer : MonoBehaviour
     {
         [SerializeField] private bool _recording;
-        
+
         protected virtual RecordingService _recordingService => _recordingServiceLocal ?? (_recordingServiceLocal = new UnityRecordingServiceFactory().Create());
         protected RecordingService _recordingServiceLocal;
-        
+
         private event Action _onUpdate;
-        private event Action _onGui;
+        private int _lastTouchCount;
 
         #region Public
+
         /// <summary>
         /// Use this to define which events get recorded
         /// Set this during the Awake/Start function of a Monobehavior
@@ -25,7 +26,7 @@ namespace BRM.EventRecorder.UnityEvents
         {
             _recordingServiceLocal = service;
         }
-        
+
         public void SetAppData(string gitSha, string server)
         {
             _recordingService.SetAppValues(gitSha, server);
@@ -53,25 +54,14 @@ namespace BRM.EventRecorder.UnityEvents
                     _onUpdate += updater.OnUpdate;
                 }
             });
-            var guiers = _recordingService.GetGuiers();
-            guiers.ForEach(guier =>
-            {
-                if (!record)
-                {
-                    _onGui -= guier.OnGui;
-                }
-                else
-                {
-                    _onGui -= guier.OnGui;
-                    _onGui += guier.OnGui;
-                }
-            });
-            
+
             _recordingService.ToggleRecording(record);
         }
+
         #endregion
-        
+
         #region Unity Lifecycle
+
         private void Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -82,27 +72,22 @@ namespace BRM.EventRecorder.UnityEvents
         {
             if (!_recording)
             {
+                _lastTouchCount = 0;
                 return;
             }
+
             _onUpdate?.Invoke();
-            
-            if (Input.GetMouseButtonDown(MouseButton.Left) || Input.GetMouseButtonUp(MouseButton.Left))
+
+            if (Input.anyKeyDown || Input.GetMouseButtonUp(MouseButton.Left) || Input.touchCount != _lastTouchCount)
             {
                 ResetSubscriptions();
             }
-        }
 
-        private void OnGUI()
-        {
-            if (!_recording)
-            {
-                return;
-            }
-            _onGui?.Invoke();
+            _lastTouchCount = Input.touchCount;
         }
 
         #endregion
-        
+
         #region Private
 
         private void ResetSubscriptions()
@@ -113,14 +98,9 @@ namespace BRM.EventRecorder.UnityEvents
                 _onUpdate -= updater.OnUpdate;
                 _onUpdate += updater.OnUpdate;
             });
-            var guiers = _recordingService.GetGuiers();
-            guiers.ForEach(guier =>
-            {
-                _onGui -= guier.OnGui;
-                _onGui += guier.OnGui;
-            });
             _recordingService.ResetSubscriptions();
         }
+
         #endregion
     }
 }

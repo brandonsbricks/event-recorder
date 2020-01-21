@@ -76,7 +76,7 @@ namespace BRM.EventRecorder.UnityEvents.Recorders
 
             //todo: acceptable ocp violation. modify when event data type is added
             collection.SceneChangedEvents = eventCollectionList.SelectMany(col => col.SceneChangedEvents).ToList();
-            collection.SimpleTouchEvents = eventCollectionList.SelectMany(col => col.SimpleTouchEvents).ToList();
+            collection.MouseEvents = eventCollectionList.SelectMany(col => col.MouseEvents).ToList();
             collection.TransformEvents = eventCollectionList.SelectMany(col => col.TransformEvents).ToList();
             collection.PointerEvents = eventCollectionList.SelectMany(col => col.PointerEvents).ToList();
             collection.ToggleEvents = eventCollectionList.SelectMany(col => col.ToggleEvents).ToList();
@@ -91,10 +91,6 @@ namespace BRM.EventRecorder.UnityEvents.Recorders
         public List<IUpdate> GetUpdaters()
         {
             return _recorders.Where(sub => sub is IUpdate).Cast<IUpdate>().ToList();
-        }
-        public List<IGui> GetGuiers()
-        {
-            return _recorders.Where(sub => sub is IGui).Cast<IGui>().ToList();
         }
     }
 }

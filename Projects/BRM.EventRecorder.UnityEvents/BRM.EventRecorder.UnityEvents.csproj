@@ -62,7 +62,7 @@
     <Compile Include="Scripts\Models\EventModels\DropdownEvent.cs" />
     <Compile Include="Scripts\Models\EventModels\EventModelAbstractions.cs" />
     <Compile Include="Scripts\Models\EventModels\SceneChangedEvent.cs" />
-    <Compile Include="Scripts\Models\EventModels\PositionEvent.cs" />
+    <Compile Include="Scripts\Models\EventModels\MouseEvent.cs" />
     <Compile Include="Scripts\Models\EventModels\SliderEvent.cs" />
     <Compile Include="Scripts\Models\EventModels\TextInputEvent.cs" />
     <Compile Include="Scripts\Models\EventModels\ToggleEvent.cs" />
@@ -71,7 +71,6 @@
     <Compile Include="Scripts\Recorders\Implementations\Recorders\CustomEventRecorder.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Recorders\KeypressRecorder.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Recorders\PointerHandlerRecorder.cs" />
-    <Compile Include="Scripts\Recorders\Implementations\Recorders\SimpleTouchRecorder.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Recorders\TransformRecorder.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Subscribers\DropdownSubscriber.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Subscribers\SceneChangedSubscriber.cs" />
@@ -79,6 +78,7 @@
     <Compile Include="Scripts\Recorders\Implementations\Subscribers\TextInputSubscriber.cs" />
     <Compile Include="Scripts\Recorders\Implementations\Subscribers\ToggleSubscriber.cs" />
     <Compile Include="Scripts\SubscriberSupport\PointerEventInputModule.cs" />
+    <Compile Include="Scripts\SubscriberSupport\UpdateBroadcaster.cs" />
     <Compile Include="Scripts\UnityRecordingServiceFactory.cs" />
     <Compile Include="Scripts\UnityEventGatherer.cs" />
     <Compile Include="Scripts\Interfaces\Interfaces.cs" />

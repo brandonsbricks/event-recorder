@@ -52,18 +52,20 @@ namespace BRM.EventRecorder.UnityEditor
         private bool _showTextInputs = true;
         private bool _showPointers = true;
         private bool _showTransforms = true;
-        private bool _showSimpleTouches = true;
+        private bool _showMouseEvents = true;
         private bool _showSceneChanges = true;
-        private bool _showStringEvents = true;
+        private bool _showStringEvents = true;//includes keypresses and custom events
         private bool _useSearch = false;
         
         private string _searchTerm;
         private bool _wasPlaying;
         private int _lastEventCount;
+        private int _lastTouchCount;
+
+        private bool _isUpdateInitialized;
 
         private event Action _onUpdate;
-        private event Action _onGui;
-
+        
         #endregion
 
         private void OnEnable()
@@ -71,6 +73,11 @@ namespace BRM.EventRecorder.UnityEditor
             _serializer = new UnityJsonSerializer();
             _fileWriter = new TextFileSerializer(_serializer, new UnityDebugger());
             _lastEventCount = 0;
+        }
+
+        private void Update()
+        {
+            Repaint();
         }
 
         #region Gui Methods
@@ -84,9 +91,24 @@ namespace BRM.EventRecorder.UnityEditor
             if (!Application.isPlaying)
             {
                 EditorGUILayout.LabelField("Start the editor to begin collecting events.");
+                _isUpdateInitialized = false;
+                
+                if (_wasPlaying)
+                {
+                    OnEditorStop();
+                }
+
+                _wasPlaying = false;
+                _lastTouchCount = 0;
                 return;
             }
-            _onGui?.Invoke();
+            if(!_isUpdateInitialized)
+            {
+                UpdateBroadcaster.OnUpdate -= OnUpdate;
+                UpdateBroadcaster.OnUpdate += OnUpdate;
+                ResetSubscriptionsAndUpdatePayload();
+                _isUpdateInitialized = true;
+            }
 
             #region initialize variables only editable in ongui
 
@@ -103,6 +125,7 @@ namespace BRM.EventRecorder.UnityEditor
 
             #endregion
 
+            _recordingService.UpdatePayload();
             var eventCollection = _recordingService.Payload.GetEventModels();
             if (eventCollection.EventCount != _lastEventCount)
             {
@@ -148,7 +171,7 @@ namespace BRM.EventRecorder.UnityEditor
         {
             GUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Show/Hide: ", GUILayout.ExpandWidth(false), GUILayout.Width(100));
-            DisplayEventTypeToggle("Simple Touches", ref _showSimpleTouches, collection.SimpleTouchEvents.Count);
+            DisplayEventTypeToggle("Mouse", ref _showMouseEvents, collection.MouseEvents.Count);
             DisplayEventTypeToggle("Text Inputs", ref _showTextInputs, collection.TextInputEvents.Count);
             GUILayout.EndHorizontal();
             
@@ -222,48 +245,27 @@ namespace BRM.EventRecorder.UnityEditor
         private void FilterAndSortEvents(EventModelCollection collection, ref List<Tuple<string, long>> eventDisplayAndTimes)
         {
             eventDisplayAndTimes.Clear();
-            if (_showSceneChanges)
-            {
-                AddEventDisplayText(collection.SceneChangedEvents, ref eventDisplayAndTimes);
-            }
-            if (_showToggles)
-            {
-                AddEventDisplayText(collection.ToggleEvents, ref eventDisplayAndTimes);
-            }
-            if (_showSlides)
-            {
-                AddEventDisplayText(collection.SliderEvents, ref eventDisplayAndTimes);
-            }
-            if (_showDropdowns)
-            {
-                AddEventDisplayText(collection.DropdownEvents, ref eventDisplayAndTimes);
-            }
-            if (_showTextInputs)
-            {
-                AddEventDisplayText(collection.TextInputEvents, ref eventDisplayAndTimes);
-            }
-            if (_showTransforms)
-            {
-                AddEventDisplayText(collection.TransformEvents, ref eventDisplayAndTimes);
-            }
-            if (_showPointers)
-            {
-                AddEventDisplayText(collection.PointerEvents, ref eventDisplayAndTimes);
-            }
-            if (_showSimpleTouches)
-            {
-                AddEventDisplayText(collection.SimpleTouchEvents, ref eventDisplayAndTimes);
-            }
-            if (_showStringEvents)
-            {
-                AddEventDisplayText(collection.StringEvents, ref eventDisplayAndTimes);
-            }
+            
+            TryAddEventDisplayText(_showSceneChanges, collection.SceneChangedEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showToggles, collection.ToggleEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showSlides, collection.SliderEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showDropdowns, collection.DropdownEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showTextInputs, collection.TextInputEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showTransforms, collection.TransformEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showPointers, collection.PointerEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showMouseEvents, collection.MouseEvents, ref eventDisplayAndTimes);
+            TryAddEventDisplayText(_showStringEvents, collection.StringEvents, ref eventDisplayAndTimes);
 
             eventDisplayAndTimes = eventDisplayAndTimes.OrderBy(displayAndTime => displayAndTime.Item2).ToList();
         }
 
-        private void AddEventDisplayText<TModel>(List<TModel> events, ref List<Tuple<string, long>> eventDisplayAndTimes) where TModel : EventModelBase
+        private void TryAddEventDisplayText<TModel>(bool show, List<TModel> events, ref List<Tuple<string, long>> eventDisplayAndTimes) where TModel : EventModelBase
         {
+            if (!show)
+            {
+                return;
+            }
+
             for (int i = 0; i < events.Count; i++)
             {
                 var model = events[i];
@@ -299,40 +301,23 @@ namespace BRM.EventRecorder.UnityEditor
 
         #region File Writing
 
-        private void Update()
+        private void OnUpdate()
         {
-            if (!_wasPlaying && Application.isPlaying)
-            {
-                ResetSubscriptionsAndUpdatePayload();
-            }
-
-            if (!Application.isPlaying && _wasPlaying)
-            {
-                OnEditorStop();
-            }
-
-            if (!Application.isPlaying)
-            {
-                _wasPlaying = false;
-                return;
-            }
-
             _onUpdate?.Invoke();
 
-            if (Input.GetMouseButtonDown(MouseButton.Left) || Input.GetMouseButtonUp(MouseButton.Left))
+            if (Input.anyKeyDown || Input.GetMouseButtonUp(MouseButton.Left) || Input.touchCount != _lastTouchCount)
             {
                 OnClick();
             }
 
             _wasPlaying = true;
+            _lastTouchCount = Input.touchCount;
         }
 
         private void OnClick()
         {
             ResetSubscriptionsAndUpdatePayload();
             _fileWriter.Write(_outputFilePath, _recordingService.Payload);
-
-            Repaint();
         }
 
         private void ResetSubscriptionsAndUpdatePayload()
@@ -342,12 +327,6 @@ namespace BRM.EventRecorder.UnityEditor
             {
                 _onUpdate -= updator.OnUpdate;
                 _onUpdate += updator.OnUpdate;
-            });
-            var guiers = _recordingService.GetGuiers();
-            guiers.ForEach(guier =>
-            {
-                _onGui -= guier.OnGui;
-                _onGui += guier.OnGui;
             });
             _recordingService.ResetSubscriptions();
             _recordingService.UpdatePayload();

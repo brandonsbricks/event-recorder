@@ -20,10 +20,9 @@ namespace BRM.EventRecorder.UnityEvents
                 },
                 new List<EventRecorder>
                 {
-                    new SimpleTouchRecorder(),
                     new PointerHandlerRecorder(),
                     new TransformRecorder(),
-                    new KeypressRecorder(),
+                    new InputRecorder(),
                     new CustomEventRecorder(),
                 });
             return service;

@@ -94,7 +94,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
     public class EventModelCollection
     {
         public List<SceneChangedEvent> SceneChangedEvents = new List<SceneChangedEvent>();
-        public List<PositionEvent> SimpleTouchEvents = new List<PositionEvent>();
+        public List<MouseEvent> MouseEvents = new List<MouseEvent>();
         public List<StringEvent> StringEvents = new List<StringEvent>();
         public List<PointerEvent> PointerEvents = new List<PointerEvent>();
         public List<TextInputEvent> TextInputEvents = new List<TextInputEvent>();
@@ -107,7 +107,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
         {
             var allEvents = new List<EventModelBase>();
             allEvents.AddRange(SceneChangedEvents);
-            allEvents.AddRange(SimpleTouchEvents);
+            allEvents.AddRange(MouseEvents);
             allEvents.AddRange(StringEvents);
             allEvents.AddRange(PointerEvents);
             allEvents.AddRange(TextInputEvents);
@@ -118,7 +118,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
             return allEvents;
         }
 
-        public int EventCount => SceneChangedEvents.Count + SimpleTouchEvents.Count + StringEvents.Count + PointerEvents.Count + 
+        public int EventCount => SceneChangedEvents.Count + MouseEvents.Count + StringEvents.Count + PointerEvents.Count + 
                                  TextInputEvents.Count + SliderEvents.Count + DropdownEvents.Count + 
                                  ToggleEvents.Count + TransformEvents.Count;
         
@@ -128,7 +128,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
         public void AppendNewEventsUniquely(EventModelCollection newCollection)
         {
             AddUnique(SceneChangedEvents, newCollection.SceneChangedEvents);
-            AddUnique(SimpleTouchEvents, newCollection.SimpleTouchEvents);
+            AddUnique(MouseEvents, newCollection.MouseEvents);
             AddUnique(StringEvents, newCollection.StringEvents);
             AddUnique(PointerEvents, newCollection.PointerEvents);
             AddUnique(TextInputEvents, newCollection.TextInputEvents);
@@ -143,7 +143,7 @@ namespace BRM.EventRecorder.UnityEvents.Models
             Func<EventModelBase, long> orderFunc = item => item.TimestampMillis;
             
             SceneChangedEvents = SceneChangedEvents.OrderBy(item => orderFunc).ToList();
-            SimpleTouchEvents = SimpleTouchEvents.OrderBy(item => orderFunc).ToList();
+            MouseEvents = MouseEvents.OrderBy(item => orderFunc).ToList();
             StringEvents = StringEvents.OrderBy(item => orderFunc).ToList();
             PointerEvents = PointerEvents.OrderBy(item => orderFunc).ToList();
             TextInputEvents = TextInputEvents.OrderBy(item => orderFunc).ToList();

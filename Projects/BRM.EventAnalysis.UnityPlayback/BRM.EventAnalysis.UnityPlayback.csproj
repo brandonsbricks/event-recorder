@@ -53,10 +53,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventReplayers\DropdownReplayer.cs" />
+    <Compile Include="EventReplayers\KeyboardInputReplayer.cs" />
     <Compile Include="EventReplayers\PointerReplayers.cs" />
     <Compile Include="EventReplayers\ReplayerAbstractions.cs" />
     <Compile Include="EventReplayers\SceneChangedReplayer.cs" />
-    <Compile Include="EventReplayers\SimpleTouchReplayer.cs" />
+    <Compile Include="EventReplayers\MouseInputReplayer.cs" />
     <Compile Include="EventReplayers\SliderReplayer.cs" />
     <Compile Include="EventReplayers\TextInputReplayer.cs" />
     <Compile Include="EventReplayers\ToggleReplayer.cs" />

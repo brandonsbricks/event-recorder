@@ -10,7 +10,8 @@ namespace BRM.EventAnalysis.UnityPlayback
         public virtual Dictionary<string, Action<EventModelBase>> GetInstructions()
         {
             var sceneChangedReplayer = new SceneChangedReplayer();
-            var simpleTouchReplayer = new SimpleTouchReplayer();
+            var mouseInputReplayer = new MouseInputReplayer();
+            var keyboardInputReplayer = new KeyboardInputReplayer();
             
             var pointerDownReplayer = new PointerDownReplayer();
             var pointerUpReplayer = new PointerUpReplayer();
@@ -28,9 +29,12 @@ namespace BRM.EventAnalysis.UnityPlayback
             var replayers = new Dictionary<string, Action<EventModelBase>>
             {
                 {SceneChangedEvent.Name, modelBase => sceneChangedReplayer.Replay(modelBase as SceneChangedEvent)},
+                
+                {MouseEvent.MouseDownEvent, modelBase => mouseInputReplayer.Replay(modelBase as MouseEvent)},
+                {MouseEvent.MouseUpEvent, modelBase => mouseInputReplayer.Replay(modelBase as MouseEvent)},
 
-                {PositionEvent.TouchUp, modelBase => simpleTouchReplayer.Replay(modelBase as PositionEvent)},
-                {PositionEvent.TouchDown, modelBase => simpleTouchReplayer.Replay(modelBase as PositionEvent)},
+                {StringEvent.KeydownEvent, modelBase => keyboardInputReplayer.Replay(modelBase as StringEvent)},
+                {StringEvent.KeyupEvent, modelBase => keyboardInputReplayer.Replay(modelBase as StringEvent)},
                 
                 {PointerEvent.IPointerDownEvent, modelBase => pointerDownReplayer.Replay(modelBase as PointerEvent)},
                 {PointerEvent.IPointerUpEvent, modelBase => pointerUpReplayer.Replay(modelBase as PointerEvent)},
